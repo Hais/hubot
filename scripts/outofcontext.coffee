@@ -17,6 +17,10 @@
 #   hubot ooc ls <user name> - list quotes for a user
 #   hubot outofcontext random - show a random quote
 #   hubot ooc random - show a random quote
+#   hubot outofcontext stat - show statistics
+#   hubot ooc stat - show statistics
+#   hubot outofcontext 99 - sets randomness to 99
+#   hubot ooc 99 - sets randomness to 99
 #
 # Author:
 #   robotmay/hais
@@ -70,10 +74,11 @@ findUser = (robot, msg, name, callback) ->
 module.exports = (robot) ->
   robot.brain.on 'loaded', =>
     robot.brain.data.oocQuotes ||= {}
+    robot.brain.data.oocRandomness ||= 88
 
   robot.respond /outofcontext|ooc (?!rm )(.*?): (.*)/i, (msg) ->
     findUser robot, msg, msg.match[1], (user) ->
-      return msg.send "Denied. You narcissist." if user.name == msg.message.user.name
+      #return msg.send "Denied. You narcissist." if user.name == msg.message.user.name
       appendQuote robot, user, msg.match[2]
       msg.send "Quote has been stored for future prosperity."
 
@@ -89,6 +94,15 @@ module.exports = (robot) ->
         for quote in quotes
           printQuote msg, quote, user
 
+  robot.respond /outofcontext|ooc stat/i, (msg) ->
+    msg.send "Randomness is 1 in " + (robot.brain.data.oocRandomness)
+    count = 0
+    count += v.length for k, v of getQuotes(robot)
+    msg.send "Quote count " + count
+
+  robot.respond /outofcontext|ooc ([0-9]+)/i, (msg) ->
+    robot.brain.data.oocRandomness = msg.match[1]
+    msg.send "Entropy factored by " + msg.match[1]
 
   robot.respond /outofcontext|ooc random/i, (msg) ->
     keys = Object.keys(getQuotes(robot))
@@ -97,5 +111,5 @@ module.exports = (robot) ->
       printQuoteForUser robot, msg, user
 
   robot.hear /./i, (msg) ->
-    printQuoteForUser robot msg msg.message.user if Math.floor(Math.random() * 88) == 42
+    printQuoteForUser(robot, msg, msg.message.user) if Math.floor(Math.random() * robot.brain.data.oocRandomness) == 0
 
