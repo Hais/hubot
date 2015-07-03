@@ -10,23 +10,24 @@
 
 module.exports = (robot) ->
 
-  # robot.hear /badger/i, (res) ->
-  #   res.send "Badgers? BADGERS? WE DON'T NEED NO STINKIN BADGERS"
-  #
-  # robot.respond /open the (.*) doors/i, (res) ->
-  #   doorType = res.match[1]
-  #   if doorType is "pod bay"
-  #     res.reply "I'm afraid I can't let you do that."
-  #   else
-  #     res.reply "Opening #{doorType} doors"
+   robot.respond /open the (.*) doors/i, (res) ->
+     doorType = res.match[1]
+     if doorType is "pod bay"
+       res.reply "I'm afraid I can't let you do that."
+     else
+       res.reply "Opening #{doorType} doors"
+
+   robot.hear /is this a game or is it real/i, (res) ->
+     res.reply "What's the difference?"
+
   #
   # robot.hear /I like pie/i, (res) ->
   #   res.emote "makes a freshly baked pie"
   #
-  # lulz = ['lol', 'rofl', 'lmao']
-  #
-  # robot.respond /lulz/i, (res) ->
-  #   res.send res.random lulz
+   lulz = ['lol', 'rofl', 'lmao']
+
+   robot.respond /lulz/i, (res) ->
+     res.send res.random lulz
   #
   # robot.topic (res) ->
   #   res.send "#{res.message.text}? That's a Paddlin'"
@@ -48,10 +49,10 @@ module.exports = (robot) ->
   #     return
   #   res.send "#{answer}, but what is the question?"
   #
-  # robot.respond /you are a little slow/, (res) ->
-  #   setTimeout () ->
-  #     res.send "Who you calling 'slow'?"
-  #   , 60 * 1000
+   robot.respond /you are a little slow/, (res) ->
+     setTimeout () ->
+       res.send "Who you calling 'slow'?"
+     , 60 * 1000
   #
   # annoyIntervalId = null
   #
