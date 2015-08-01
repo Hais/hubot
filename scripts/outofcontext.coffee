@@ -48,6 +48,7 @@ printQuote = (msg, quote, user) ->
 
 printQuoteForUser = (robot, msg, user) ->
   if (quotes = getUserQuotes(robot, user))
+    return if !quotes.length
     randomQuote = quotes[Math.floor(Math.random() * quotes.length)]
     printQuote msg, randomQuote, user
 
