@@ -28,5 +28,6 @@
   "hubot-cron",
   "hubot-fliptable",
   "hubot-heroku-keepalive",
-  "hubot-clj"
+  "hubot-clj",
+  "hubot-todo"
 ]
