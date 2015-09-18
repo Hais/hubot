@@ -11,6 +11,7 @@
     "hubot": "~2.16.0",
     "hubot-bitbucket-pr": "~0.2.0",
     "hubot-calculator": "~0.4.0",
+    "hubot-clj": "0.0.5",
     "hubot-cron": "^0.2.9",
     "hubot-darksky": "~1.0.2",
     "hubot-diagnostics": "0.0.1",
