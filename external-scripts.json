@@ -29,5 +29,8 @@
   "hubot-fliptable",
   "hubot-heroku-keepalive",
   "hubot-clj",
-  "hubot-todo"
+  "hubot-todo",
+  "hubot-wikipedia",
+  "hubot-regex",
+  "hubot-euphemism"
 ]
