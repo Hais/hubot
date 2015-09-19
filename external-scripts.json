@@ -32,5 +32,6 @@
   "hubot-wikipedia",
   "hubot-caffeine",
   "hubot-euphemism",
-  "hubot-troll"
+  "hubot-troll",
+  "hubot-wolfram"
 ]
