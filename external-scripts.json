@@ -30,6 +30,6 @@
   "hubot-heroku-keepalive",
   "hubot-clj",
   "hubot-wikipedia",
-  "hubot-regex",
+  "hubot-caffeine",
   "hubot-euphemism"
 ]
