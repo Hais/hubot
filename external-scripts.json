@@ -31,5 +31,6 @@
   "hubot-clj",
   "hubot-wikipedia",
   "hubot-caffeine",
-  "hubot-euphemism"
+  "hubot-euphemism",
+  "hubot-troll"
 ]
