@@ -30,7 +30,7 @@ querystring = require("querystring")
 
 module.exports = (robot) ->
 
-  robot.respond /gangsta (.+)/i, (msg) ->
+  robot.respond /gangsta|gangster (.+)/i, (msg) ->
     getWiki msg.match[1], msg, (text) ->
         translateGangster msg, text
 
@@ -57,9 +57,6 @@ getWiki = (topic, msg, cb) ->
         summary = article.extract.split(". ")[0..1].join ". "
     cb summary
 
-createURL = (title) ->
-  "#{WIKI_EN_URL}/#{encodeURIComponent(title)}"
-
 wikiRequest = (msg, params = {}, handler) ->
   msg.http(WIKI_API_URL)
   .query(params)
@@ -70,15 +67,17 @@ wikiRequest = (msg, params = {}, handler) ->
 
     handler JSON.parse(body)
 
+send = (context, text) ->
+  context.send '>' + text.trim().replace(/(?:\r\n|\r|\n)/g, "_\n>_")
 
-translateGangster = (msg, text) ->
-  msg.http("http://www.gizoogle.net/textilizer.php")
+translateGangster = (context, text) ->
+  context.http("http://www.gizoogle.net/textilizer.php")
   .header('content-type', 'application/x-www-form-urlencoded')
-  .post(querystring.stringify({translatetext: text, name: "Tranzizzle Dis Shiznit"})) (err, res, body) ->
-    msg.send '>' + cheerio.load(body)('textarea').text().trim().replace(/(?:\r\n|\r|\n)/g, "_\n>_")
+  .post(querystring.stringify({translatetext: text})) (err, res, body) ->
+    send context, cheerio.load(body)('textarea').text() if !err
 
-rinkworks = (dialect, msg, text) ->
-  msg.http("http://www.rinkworks.com/dialect/dialectt.cgi")
+rinkworks = (dialect, context, text) ->
+  context.http("http://www.rinkworks.com/dialect/dialectt.cgi")
   .header('content-type', 'application/x-www-form-urlencoded')
   .post(querystring.stringify({text: text, dialect: dialect})) (err, res, body) ->
-    msg.send '>' + cheerio.load(body)('div.dialectized_text p').text().trim().replace(/(?:\r\n|\r|\n)/g, "\n>")
+    send context, cheerio.load(body)('div.dialectized_text p').text() if !err
