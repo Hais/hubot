@@ -40,14 +40,40 @@ class RegexUserMessageHistory
       if re.test(message.text)
         return message
 
-  processMessage: (message) ->
+  findUserFuzzy = (robot, name) ->
+    users = []
+    brainUsers = robot.brain.users()
+    console.log
+    for key in Object.keys(brainUsers)
+      user = brainUsers[key]
+      users.push user if userName(user).toLowerCase().indexOf(name) >= 0
+    return users
+
+  findUser = (robot, name) ->
+    users = robot.brain.usersForFuzzyName name.trim()
+    if users.length is 1
+      user = users[0]
+      return userName user
+    else
+      users = findUserFuzzy robot, name.trim().toLowerCase()
+      return username(users[0]) if users.length == 1
+
+  userName = (user) ->
+    user.real_name || user.name
+
+  formatMessage = (robot, username, replaced) ->
+    replaced = '>' + replaced.replace(/^>/g, '').replace(/(?:\r\n|\r|\n)/g, "\n>")
+    username = findUser(robot, username)
+    return "_What #{username} meant to say was:_ \n#{replaced}"
+
+  processMessage: (robot, message) ->
     # If the user has typed a regex string, then attempt to perform replacement
     # on their last known message.
     if match = message.text.match(/^([\u0060])?s\/(.+?)\/(.*?)\/([ig]*)?([\u0060])?$/)
       if lastMessage = @findLastMessage(message, match[2], match[4])
         re = new RegExp(match[2], match[4])
         replaced = lastMessage.text.replace(re, match[3])
-        return "What #{lastMessage.user} meant to say was: #{replaced}"
+        return formatMessage robot, lastMessage.user, replaced
       return false
 
     # Check a simpler regex format of s/find/replace (no trailing slash)
@@ -55,7 +81,7 @@ class RegexUserMessageHistory
       if lastMessage = @findLastMessage(message, match[2], 'ig')
         re = new RegExp(match[2], 'ig')
         replaced = lastMessage.text.replace(re, match[3])
-        return "What #{lastMessage.user} meant to say was: #{replaced}"
+        return formatMessage robot, lastMessage.user, replaced
       return false
 
     # Normal message, log it to history
@@ -87,5 +113,5 @@ module.exports = (robot) ->
     history = new RegexUserMessageHistory
 
   robot.hear /.+/, (msg) ->
-    if response = history.processMessage(msg.message)
+    if response = history.processMessage(robot, msg.message)
       msg.send response
