@@ -33,5 +33,6 @@
   "hubot-caffeine",
   "hubot-euphemism",
   "hubot-troll",
-  "hubot-wolfram"
+  "hubot-wolfram",
+  "hubot-aws"
 ]
