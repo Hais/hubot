@@ -25,6 +25,10 @@
 # Author:
 #   robotmay/hais
 
+blacklist = []
+if process.env.HUBOT_OOC_BLACKLIST
+  blacklist = process.env.HUBOT_OOC_BLACKLIST.split(',')
+
 getQuotes = (robot) ->
   robot.brain.data.oocQuotes || {}
 
@@ -72,6 +76,9 @@ findUser = (robot, msg, name, callback) ->
     msg.send "Too many users like #{name}" if users.length > 1
     msg.send "#{name}? Never heard of 'em" if users.length == 0
 
+getRandomness = (robot) ->
+  robot.brain.data.oocRandomness || 88
+
 module.exports = (robot) ->
   robot.brain.on 'loaded', =>
     robot.brain.data.oocQuotes ||= {}
@@ -96,10 +103,12 @@ module.exports = (robot) ->
           printQuote msg, quote, user
 
   robot.respond /outofcontext|ooc stat/i, (msg) ->
-    msg.send "Randomness is 1 in " + (robot.brain.data.oocRandomness)
+    msg.send "Randomness is 1 in " + getRandomness(robot)
     count = 0
     count += v.length for k, v of getQuotes(robot)
-    msg.send "Quote count " + count
+    msg.send "Quote count: " + count
+    msg.send "Blacklisted rooms: " + blacklist.join(', ')
+    msg.send msg.message.room + " room blacklisted: " + (msg.message.room in blacklist)
 
   robot.respond /outofcontext|ooc ([0-9]+)/i, (msg) ->
     robot.brain.data.oocRandomness = msg.match[1]
@@ -112,5 +121,6 @@ module.exports = (robot) ->
       printQuoteForUser robot, msg, user
 
   robot.hear /./i, (msg) ->
-    printQuoteForUser(robot, msg, msg.message.user) if Math.floor(Math.random() * robot.brain.data.oocRandomness) == 0
+    return if msg.message.room in blacklist
+    printQuoteForUser(robot, msg, msg.message.user) if Math.floor(Math.random() * getRandomness(robot)) == 0
 
