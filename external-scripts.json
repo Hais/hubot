@@ -34,8 +34,6 @@
   "hubot-euphemism",
   "hubot-troll",
   "hubot-wolfram",
-  "hubot-aws",
-  "hubot-lambda",
   "hubot-giphy-gifme",
   "hubot-standup"
 ]
