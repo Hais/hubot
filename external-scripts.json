@@ -35,5 +35,6 @@
   "hubot-troll",
   "hubot-wolfram",
   "hubot-aws",
-  "hubot-lambda"
+  "hubot-lambda",
+  "hubot-giphy-gifme"
 ]
