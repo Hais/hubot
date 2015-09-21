@@ -37,8 +37,11 @@ getUserQuotes = (robot, user) ->
 
 appendQuote = (robot, user, message) ->
   data = getQuotes robot
+  fresh = Object.keys(data).length == 0
   data[user.name] or= []
   data[user.name].push message
+  # create new quote bin if previously empty
+  robot.brain.data.oocQuotes = data if fresh
 
 removeQuote = (robot, user, message) ->
   index = getQuotes(robot, user).indexOf(message)
