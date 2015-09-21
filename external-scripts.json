@@ -36,5 +36,6 @@
   "hubot-wolfram",
   "hubot-aws",
   "hubot-lambda",
-  "hubot-giphy-gifme"
+  "hubot-giphy-gifme",
+  "hubot-standup"
 ]
