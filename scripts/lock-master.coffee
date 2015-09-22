@@ -2,10 +2,10 @@
 #   Master locking magic
 #
 # Author:
-#   s.doig@socialsuperstore.com
+#   s.doigsocialsuperstore.com
 
 userDisplayName = (user) ->
-  return user.real_name || user.name
+  return user.name
 
 userCanonName = (user) ->
   return user.name || user.real_name
@@ -33,7 +33,7 @@ module.exports = (robot) ->
         if getLock(robot).user == userCanonName(msg.message.user)
           msg.send "You've already got the lock you stupid man."
         else
-          msg.send "No can do! " + userDisplayName(msg.message.user) + " has had the lock since " + getLock(robot).time.toString() + "!"
+          msg.send "No can do! " + getLock(robot).user + " has had the lock since " + getLock(robot).time.toString() + "!"
       else
         grantLock(robot, msg.message.user)
         msg.send "Lock granted to " + userDisplayName(msg.message.user) + ".  Make it snappy."
@@ -45,14 +45,14 @@ module.exports = (robot) ->
           releaseLock(robot)
           msg.send "I hath released yo' lock on master, dawg."
         else
-          msg.send "Nice try @" + msg.message.user.name + ", but you don't own this lock. " + getLock(robot).user + " does."
+          msg.send "Nice try " + userDisplayName(msg.message.user) + ", but you don't own this lock. " + getLock(robot).user + " does."
       else
         msg.send "Nobody told me about a lock.  Going back to sleep."
 
   robot.respond /unlock\s+master/i, (msg) ->
     if isInDevRoom(msg)
       if isLocked(robot)
-        msg.reply "Forcing unlock of master lock acquired by @" + getLock(robot).user + " at " + getLock(robot).time.toString() + ".  He better not give me any shit."
+        msg.reply "Forcing unlock of master lock acquired by " + getLock(robot).user + " at " + getLock(robot).time.toString() + ".  He better not give me any shit."
         releaseLock(robot)
       else
         msg.reply "Nobody told me about a lock.  Going back to sleep."
