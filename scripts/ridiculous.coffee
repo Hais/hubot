@@ -8,7 +8,7 @@
 #   None
 #
 # Author:
-#   Sean Doig <s.doig@socialsuperstore.com>
+#   Sean Doig (s.doig@socialsuperstore.com)
 
 module.exports = (robot) ->
   robot.hear /(that'?s|it'?s|this\s+is)\s+ridiculous/i, (msg) ->
