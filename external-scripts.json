@@ -27,13 +27,5 @@
   "hubot-suggest",
   "hubot-cron",
   "hubot-fliptable",
-  "hubot-heroku-keepalive",
-  "hubot-clj",
-  "hubot-wikipedia",
-  "hubot-caffeine",
-  "hubot-euphemism",
-  "hubot-troll",
-  "hubot-wolfram",
-  "hubot-giphy-gifme",
-  "hubot-standup"
+  "hubot-heroku-keepalive"
 ]
