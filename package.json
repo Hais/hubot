@@ -40,6 +40,7 @@
     "hubot-seen": "~0.2.3",
     "hubot-shipit": "~0.2.0",
     "hubot-slack": "~3.3.0",
+    "hubot-slack-attachment": "^1.0.1",
     "hubot-soon": "~1.0.0",
     "hubot-standup": "^0.1.8",
     "hubot-suggest": "0.0.1",
