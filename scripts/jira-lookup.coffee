@@ -21,13 +21,19 @@
 
 return unless process.env.HUBOT_JIRA_LOOKUP_URL
 
+pattern = process.env.HUBOT_JIRA_PROJECTS || ""
+
+return robot.logger.error "Missing configuration HUBOT_JIRA_PROJECTS" unless pattern.length
+
+regex = new RegExp "(#{pattern})-[0-9]{1,10}", 'gi'
+
 module.exports = (robot) ->
 
   ignored_users = process.env.HUBOT_JIRA_LOOKUP_IGNORE_USERS
   if ignored_users == undefined
     ignored_users = "jira|github"
 
-  robot.hear /\b[a-zA-Z]{2,12}-[0-9]{1,10}\b/, (msg) ->
+  robot.hear regex, (msg) ->
 
     return if msg.message.user.name.match(new RegExp(ignored_users, "gi"))
 
