@@ -19,6 +19,8 @@
 #   Benjamin Sherman  <benjamin@jivesoftware.com> (http://www.jivesoftware.com)
 #   Dustin Miller <dustin@sharepointexperts.com> (http://sharepointexperience.com)
 
+return unless process.env.HUBOT_JIRA_LOOKUP_URL
+
 module.exports = (robot) ->
 
   ignored_users = process.env.HUBOT_JIRA_LOOKUP_IGNORE_USERS
