@@ -6,6 +6,7 @@
 #   hubot update git - Perform git pull
 #   hubot show version - Show git revision
 #   hubot check for updates - Inspects NPM for package updates
+#   hubot server health - Shows system load
 #
 #
 # Author:
