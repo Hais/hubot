@@ -15,6 +15,7 @@ spawn = require('child_process').spawn
 
 gitPath = process.env.HUBOT_GIT_PATH
 checkUpdatesPath = process.env.HUBOT_CHECK_UPDATES_PATH
+uptimePath = process.env.HUBOT_UPTIME_PATH
 
 delay = (ms, func) -> setTimeout func, ms
 
@@ -50,13 +51,16 @@ runCmd = (robot, room, cmd, args, next) ->
   )
 
 updateGit = (robot, room, next) ->
-  return runCmd(robot, room, gitPath, ["pull"], next)
+  runCmd(robot, room, gitPath, ["pull"], next)
 
 getRevision = (robot, room, next) ->
-  return runCmd(robot, room, gitPath, ["log", "--oneline", "-n", "1"])
+  runCmd(robot, room, gitPath, ["log", "--oneline", "-n", "1"])
 
 getCheckUpdates = (robot, room, next) ->
-  return runCmd(robot, room, checkUpdatesPath)
+  runCmd(robot, room, checkUpdatesPath)
+
+getServerUptime = (robot, room, next) ->
+  runCmd(robot, room, uptimePath)
 
 respawnBot = (robot, room) ->
   robot.messageRoom room, "Restarting in #{timeout} seconds..."
@@ -92,6 +96,10 @@ module.exports = (robot) ->
   robot.respond /respawn/i, (msg) ->
     room = msg.message.user.room
     respawnBot(robot, room)
+
+  robot.respond /server health/i, (msg) ->
+    room = msg.message.user.room
+    getServerUptime(robot, room)
 
   robot.brain.on 'loaded', =>
     room = robot.brain.get "maintenanceReloadRoom"
