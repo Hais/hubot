@@ -25,6 +25,12 @@ releaseLock = (robot) ->
 isLocked = (robot) ->
   return !!getLock(robot)
 
+randInt = (min, max) ->
+  return Math.floor(Math.random()*(max-1))+min
+
+thumbsUp = () ->
+  return ":thumbsup::skin-tone-" + randInt(2,6).toString() + ":"
+
 module.exports = (robot) ->
 
   robot.hear /^lock\s+mast(er|a+)/i, (msg) ->
@@ -36,14 +42,14 @@ module.exports = (robot) ->
           msg.send "No can do! " + getLock(robot).user + " has had the lock since " + getLock(robot).time.toString() + "!"
       else
         grantLock(robot, msg.message.user)
-        msg.send "Lock granted to " + userDisplayName(msg.message.user) + ".  Make it snappy."
+        msg.send thumbsUp()
 
   robot.hear /^(unlock(ing)?|releas(e|ing))\s+mast(er|a+)/i, (msg) ->
     if isInDevRoom(msg)
       if isLocked(robot)
         if getLock(robot).user == userCanonName(msg.message.user)
           releaseLock(robot)
-          msg.send "I hath released yo' lock on master, dawg."
+          msg.send thumbsUp()
         else
           msg.send "Nice try " + userDisplayName(msg.message.user) + ", but you don't own this lock. " + getLock(robot).user + " does."
       else
