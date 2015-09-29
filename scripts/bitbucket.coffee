@@ -23,7 +23,7 @@ module.exports = (robot) ->
   # The push listener will only parse the body and emit an event to be picked
   # up elsewhere
   robot.router.post bitbucketPushUrl, (req, res) ->
-    push = Push.parse req.body
+#    push = Push.parse req.body
 
     robot.emit bitbucketPushEvent,
       "res": req.body # in case you prefer using json response directly
