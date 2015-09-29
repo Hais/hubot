@@ -23,7 +23,7 @@ module.exports = (robot) ->
   # The push listener will only parse the body and emit an event to be picked
   # up elsewhere
   robot.router.post bitbucketPushUrl, (req, res) ->
-    push = Push.parse req.body
+#    push = Push.parse req.body
 
     robot.emit bitbucketPushEvent,
       "res": req.body # in case you prefer using json response directly
@@ -32,7 +32,7 @@ module.exports = (robot) ->
 
 
   robot.on bitbucketPushEvent, (pushEvent) ->
-    res = data.res # using json data directly here
+    res = pushEvent.res # using json data directly here
     repo_name = res.repository.full_name
     repo_url = res.repository.links.html.href
     commits_url = res.push.changes[0].links.html.href
@@ -56,7 +56,7 @@ module.exports = (robot) ->
     response += "#{new_commit_hash_short} #{new_commit_message}\n"
     response += " - #{new_commit_author_display_name} (#{new_commit_author_username})\n"
 
-    robot.messageRoom data.room, response
+    robot.messageRoom pushEvent.room, response
 
 #    robot.emit 'slack.attachment',
 #      message: msg.message
