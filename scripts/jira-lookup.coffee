@@ -100,6 +100,8 @@ module.exports = (robot) ->
             if process.env.HUBOT_SLACK_INCOMING_WEBHOOK?
               robot.emit 'slack.attachment',
                 message: msg.message
+                icon_url: "https://slack.global.ssl.fastly.net/66f9/img/services/jira_128.png"
+                username: "Jira"
                 content:
                   fallback: fallback
                   title: "#{data.key.value}: #{data.summary.value}"
