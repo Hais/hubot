@@ -65,27 +65,26 @@ module.exports = (robot) ->
 
 #    robot.messageRoom pushEvent.room, response
 
-    title = res.push.changes.length + " new commits"
+
     title_link = res.push.changes[0].links.html.href
 
-    fields = []
     for change in res.push.changes
-      commit = change.new
-      fields.push
-        title: commit.target.author.user.display_name + " - " + moment(commit.target.date).fromNow()
-        value: "<" + commit.target.links.html.href + "|" + commit.target.hash.substring(0,7) + "> " + commit.target.message
-        short: false
+      fields = for commit in change.commits
+        {
+          title: commit.author.user.display_name
+          value: "<" + commit.links.html.href + "|" + commit.hash.substring(0, 7) + "> " + commit.message
+          short: false
+        }
+      title = change.commits.length + (change.truncated ? "+": "") + " new commits to " + change.new.name + " - " + moment(change.new.target.date).fromNow()
 
-    console.log process.env.HUBOT_SLACK_INCOMING_WEBHOOK
-
-    console.log robot.emit 'slack.attachment',
-      message: "Pushes"
-      channel: "#" + pushEvent.room
-      username: "BitBucket"
-      icon_url: "https://slack.global.ssl.fastly.net/0c91/plugins/bitbucket/assets/service_128.png"
-      content:
-        fallback: fallback
-        title: title
-        title_link: title_link
-        fields: fields
+      console.log robot.emit 'slack.attachment',
+        message: "Pushes"
+        channel: "#" + pushEvent.room
+        username: "BitBucket"
+        icon_url: "https://slack.global.ssl.fastly.net/0c91/plugins/bitbucket/assets/service_128.png"
+        content:
+          fallback: fallback
+          title: title
+          title_link: title_link
+          fields: fields
 
