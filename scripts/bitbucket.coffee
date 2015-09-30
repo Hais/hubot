@@ -11,7 +11,8 @@
 # Author:
 #   andrewtarry
 #
-# Push = require '../lib/Push'
+
+moment = require('moment')
 
 bitbucketPushUrl = process.env.HUBOT_BITBUCKET_PUSH_URL or '/bitbucket/push/:room'
 bitbucketPushEvent = process.env.HUBOT_BITBUCKET_PUSH_EVENT or 'bitbucketPushReceived'
@@ -33,6 +34,7 @@ module.exports = (robot) ->
 
   robot.on bitbucketPushEvent, (pushEvent) ->
     res = pushEvent.res # using json data directly here
+
     repo_name = res.repository.full_name
     repo_url = res.repository.links.html.href
     commits_url = res.push.changes[0].links.html.href
@@ -40,6 +42,9 @@ module.exports = (robot) ->
     response = "[#{repo_name}] #{repo_url}\n"
 
     commit = res.push.changes[0].new
+
+#    console.log commit
+
     new_commit_author_username = commit.target.author.user.username
     new_commit_author_display_name = commit.target.author.user.display_name
     new_commit_author_url = commit.target.author.user.links.html.href
@@ -56,35 +61,31 @@ module.exports = (robot) ->
     response += "#{new_commit_hash_short} #{new_commit_message}\n"
     response += " - #{new_commit_author_display_name} (#{new_commit_author_username})\n"
 
-    robot.messageRoom pushEvent.room, response
+    fallback = response
 
-#    robot.emit 'slack.attachment',
-#      message: msg.message
-#      content:
-#        fallback: fallback
-#        title: "#{data.key.value}: #{data.summary.value}"
-#        title_link: res.push.changes[0].links.html.href
-#        text: data.description.value
-#        fields: [
-#          {
-#            title: data.reporter.key
-#            value: data.reporter.value
-#            short: true
-#          }
-#          {
-#            title: data.assignee.key
-#            value: data.assignee.value
-#            short: true
-#          }
-#          {
-#            title: data.status.key
-#            value: data.status.value
-#            short: true
-#          }
-#          {
-#            title: data.created.key
-#            value: data.created.value
-#            short: true
-#          }
-#        ]
+#    robot.messageRoom pushEvent.room, response
+
+    title = res.push.changes.length + " new commits"
+    title_link = res.push.changes[0].links.html.href
+
+    fields = []
+    for change in res.push.changes
+      commit = change.new
+      fields.push
+        title: commit.target.author.user.display_name + " - " + moment(commit.target.date).fromNow()
+        value: "<" + commit.target.links.html.href + "|" + commit.target.hash.substring(0,7) + "> " + commit.target.message
+        short: false
+
+    console.log process.env.HUBOT_SLACK_INCOMING_WEBHOOK
+
+    console.log robot.emit 'slack.attachment',
+      message: "Pushes"
+      channel: "#" + pushEvent.room
+      username: "BitBucket"
+      icon_url: "https://slack.global.ssl.fastly.net/0c91/plugins/bitbucket/assets/service_128.png"
+      content:
+        fallback: fallback
+        title: title
+        title_link: title_link
+        fields: fields
 
