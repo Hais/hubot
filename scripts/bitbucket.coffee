@@ -81,7 +81,7 @@ module.exports = (robot) ->
       else if change.commits.length > 1
         str = "#{change.commits.length} new commits"
 
-      title = "#{str}" + change.new.name + " - " + moment(change.new.target.date).calendar()
+      title = "#{str} to #{change.new.type} `#{change.new.name}` - " + moment(change.new.target.date).calendar()
 
       console.log robot.emit 'slack.attachment',
         message: "Pushes"
