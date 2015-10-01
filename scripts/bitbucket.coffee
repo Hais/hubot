@@ -74,9 +74,14 @@ module.exports = (robot) ->
           value: "<" + commit.links.html.href + "|" + commit.hash.substring(0, 7) + "> " + formatMessage commit.message
           short: false
         }
-      suffix = (change.truncated ? "+ new commits" : " new commit")
-      length = change.commits.length
-      title = "#{length}#{suffix}" + change.new.name + " - " + moment(change.new.target.date).fromNow()
+
+      str = "One new commit"
+      if change.truncated
+        str =  "Several  new commits"
+      else if change.commits.length > 1
+        str = "#{change.commits.length} new commits"
+
+      title = "#{str}" + change.new.name + " - " + moment(change.new.target.date).calendar()
 
       console.log robot.emit 'slack.attachment',
         message: "Pushes"
