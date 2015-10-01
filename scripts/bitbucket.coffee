@@ -17,6 +17,10 @@ moment = require('moment')
 bitbucketPushUrl = process.env.HUBOT_BITBUCKET_PUSH_URL or '/bitbucket/push/:room'
 bitbucketPushEvent = process.env.HUBOT_BITBUCKET_PUSH_EVENT or 'bitbucketPushReceived'
 
+jiraUrl = process.env.HUBOT_JIRA_LOOKUP_URL
+pattern = process.env.HUBOT_JIRA_PROJECTS || ""
+jiraPattern = new RegExp "(#{pattern})-[0-9]{1,10}", 'gi'
+
 module.exports = (robot) ->
 
   # Listen for bitbucket sending a commit
@@ -27,7 +31,7 @@ module.exports = (robot) ->
 #    push = Push.parse req.body
 
     robot.emit bitbucketPushEvent,
-      "res": req.body # in case you prefer using json response directly
+      res: req.body # in case you prefer using json response directly
       room: req.params.room
     res.send 'OK'
 
@@ -42,8 +46,6 @@ module.exports = (robot) ->
     response = "[#{repo_name}] #{repo_url}\n"
 
     commit = res.push.changes[0].new
-
-#    console.log commit
 
     new_commit_author_username = commit.target.author.user.username
     new_commit_author_display_name = commit.target.author.user.display_name
@@ -63,19 +65,18 @@ module.exports = (robot) ->
 
     fallback = response
 
-#    robot.messageRoom pushEvent.room, response
-
-
     title_link = res.push.changes[0].links.html.href
 
     for change in res.push.changes
       fields = for commit in change.commits
         {
           title: commit.author.user.display_name
-          value: "<" + commit.links.html.href + "|" + commit.hash.substring(0, 7) + "> " + commit.message
+          value: "<" + commit.links.html.href + "|" + commit.hash.substring(0, 7) + "> " + formatMessage commit.message
           short: false
         }
-      title = change.commits.length + (change.truncated ? "+": "") + " new commits to " + change.new.name + " - " + moment(change.new.target.date).fromNow()
+      suffix = (change.truncated ? "+ new commits" : " new commit")
+      length = change.commits.length
+      title = "#{length}#{suffix}" + change.new.name + " - " + moment(change.new.target.date).fromNow()
 
       console.log robot.emit 'slack.attachment',
         message: "Pushes"
@@ -88,3 +89,9 @@ module.exports = (robot) ->
           title_link: title_link
           fields: fields
 
+
+  formatMessage = (msg) ->
+    if pattern
+      msg = msg .replace jiraPattern, (match) ->
+         "<#{jiraUrl}/browse/#{match}|#{match}>"
+    msg
