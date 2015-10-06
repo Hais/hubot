@@ -24,7 +24,7 @@ module.exports = (robot) ->
     if last_command[msg.message.room]?
       cmd = last_command[msg.message.room]
       userName = cmd.user['real_name'] or cmd.user.name
-      msg.send ">* #{cmd.cmd} * \nby *#{userName}* _" + moment(cmd.date).fromNow() + "_"
+      msg.send ">#{cmd.cmd} \n by *#{userName}* _" + moment(cmd.date).fromNow() + "_"
 
   robot.respond /(.+)/i, (msg) ->
     store msg
