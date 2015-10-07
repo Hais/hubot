@@ -27,7 +27,6 @@ module.exports = (robot) ->
     respond robot, msg
 
   robot.respond /\b(yes|no|maybe)\b/i, (msg) ->
-    console.log "Forcing "+msg.match[1]
     respond robot, msg, msg.match[1]
 
   robot.hear /^(yes|no|maybe)!$/i, (msg) ->
