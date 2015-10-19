@@ -41,7 +41,7 @@ module.exports = (robot) ->
 
     repo_name = res.repository.full_name
     repo_url = res.repository.links.html.href
-    commits_url = res.push.changes[0].links.html.href
+    commits_url = res.push.changes[0].links.html.href if res.push.changes[0].links.html
 
     response = "[#{repo_name}] #{repo_url}\n"
 
