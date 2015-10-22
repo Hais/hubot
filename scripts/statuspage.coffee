@@ -13,6 +13,8 @@
 
 moment = require('moment')
 
+timezone = process.env.HUBOT_STATUSPAGE_TIMEZONE or "Europe/London"
+
 module.exports = (robot) ->
   return robot.logger.error "Missing configuration HUBOT_STATUSPAGE_ROOM" unless process.env.HUBOT_STATUSPAGE_ROOM?
 
@@ -28,11 +30,11 @@ module.exports = (robot) ->
 
     fields.push
       title: component.name
-      value: "Changed from *" + ucwords(update.old_status) + "* to *" + ucwords(update.new_status) + "*"
+      value: "Changed from " + ucwords(update.old_status) + " to " + ucwords(update.new_status)
 
     fields.push
       title: "Updated"
-      value: moment(update.created_at).calendar()
+      value: moment(update.created_at).tz(timezone).calendar()
       short: true
 
     if component.description?
@@ -46,9 +48,9 @@ module.exports = (robot) ->
     robot.emit 'slack.attachment',
       channel: "#" + room
       username: "StatusPage.io"
-      color: color
       icon_url: "http://dka575ofm4ao0.cloudfront.net/assets/base/apple-touch-icon-144x144-precomposed-94dc1d1bac88837fc28fa5706f7494aa.png"
       content:
+        color: color
         fields: fields
 
 ucwords = (str) ->
