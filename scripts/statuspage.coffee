@@ -14,7 +14,6 @@
 moment = require('moment')
 
 module.exports = (robot) ->
-
   return robot.logger.error "Missing configuration HUBOT_STATUSPAGE_ROOM" unless process.env.HUBOT_STATUSPAGE_ROOM?
 
   room = process.env.HUBOT_STATUSPAGE_ROOM
@@ -28,18 +27,8 @@ module.exports = (robot) ->
     fields = []
 
     fields.push
-      title: "Component"
-      value: component.name
-
-    fields.push
-      title: "Now"
-      value: ucwords(update.new_status)
-      short: true
-
-    fields.push
-      title: "Before"
-      value: ucwords(update.old_status)
-      short: true
+      title: component.name
+      value: "Changed from *" + ucwords(update.old_status) + "* to *" + ucwords(update.new_status) + "*"
 
     fields.push
       title: "Updated"
@@ -48,11 +37,11 @@ module.exports = (robot) ->
 
     if component.description?
       fields.push
-          title: "Description"
-          value: component.description
-          short: false
+        title: "Description"
+        value: component.description
+        short: false
 
-    color = if update.new_status is "operational" then '#35B98F' else '#EAA800'
+    color = if update.new_status is "operational" then 'good' else 'danger'
 
     robot.emit 'slack.attachment',
       channel: "#" + room
