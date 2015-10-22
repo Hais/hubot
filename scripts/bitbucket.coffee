@@ -44,12 +44,10 @@ module.exports = (robot) ->
     title_link = res.push.changes[0].links.html.href if res.push.changes[0].links.html?
 
     for change in res.push.changes
-      fields = for commit in change.commits
-        {
-          title: commit.author.user.display_name
-          value: "<" + commit.links.html.href + "|" + commit.hash.substring(0, 7) + "> " + formatMessage commit.message
-          short: false
-        }
+      fields = for commit in change.commits when commit.author.user
+        title: commit.author.user.display_name
+        value: "<" + commit.links.html.href + "|" + commit.hash.substring(0, 7) + "> " + formatMessage commit.message
+        short: false
 
       str = "One new commit"
       if change.truncated
