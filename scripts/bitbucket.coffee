@@ -21,6 +21,8 @@ jiraUrl = process.env.HUBOT_JIRA_LOOKUP_URL
 pattern = process.env.HUBOT_JIRA_PROJECTS || ""
 jiraPattern = new RegExp "(#{pattern})-[0-9]{1,10}", 'gi'
 
+timezone = process.env.HUBOT_BITBUCKET_TIMEZONE or "Europe/London"
+
 module.exports = (robot) ->
 
   # Listen for bitbucket sending a commit
@@ -41,23 +43,21 @@ module.exports = (robot) ->
 
     commit = res.push.changes[0].new
 
-    title_link = res.push.changes[0].links.html.href if res.push.changes[0].links.html?
+    title_link = res.push.changes[0].links.html.href if res.push.changes[0].links?.html?
 
     for change in res.push.changes
-      fields = for commit in change.commits when commit.author.user
+      fields = for commit in change.commits when commit.author?.user?
         title: commit.author.user.display_name
-        value: "<" + commit.links.html.href + "|" + commit.hash.substring(0, 7) + "> " + formatMessage commit.message
+        value: "<#{commit.links.html.href}|" + commit.hash.substring(0, 7) + "> " + formatMessage commit.message
         short: false
 
-      str = "One new commit"
-      if change.truncated
-        str =  "Several  new commits"
-      else if change.commits.length > 1
-        str = "#{change.commits.length} new commits"
+      str = if change.truncated then "Several  new commits"
+      else if change.commits.length > 1 then "#{change.commits.length} new commits"
+      else "One new commit"
 
-      title = "#{str} to #{change.new.type} `#{change.new.name}` - " + moment(change.new.target.date).calendar()
+      title = "#{str} to #{change.new.type} `#{change.new.name}` - " + moment(change.new.target.date).tz(timezone).calendar()
 
-      console.log robot.emit 'slack.attachment',
+      robot.emit 'slack.attachment',
         message: "Pushes"
         channel: "#" + pushEvent.room
         username: "BitBucket"
@@ -69,7 +69,6 @@ module.exports = (robot) ->
 
 
   formatMessage = (msg) ->
-    if pattern
-      msg = msg .replace jiraPattern, (match) ->
+    if pattern then msg .replace jiraPattern, (match) ->
          "<#{jiraUrl}/browse/#{match}|#{match}>"
-    msg
+    else msg
