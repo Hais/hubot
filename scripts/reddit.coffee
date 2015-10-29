@@ -15,6 +15,7 @@
 #   hubot what should i know
 #   hubot what should i buy
 #   hubot predict the future
+#   hubot go wild
 #
 #
 # Author:
@@ -89,6 +90,10 @@ module.exports = (robot) ->
 
   robot.respond /what should i buy/i, (msg) ->
     query "shutupandtakemymoney", null, (item) ->
+      msg.send item.data.title + "\n" + item.data.url
+
+  robot.respond /go wild/i, (msg) ->
+    query "yonewild", null, (item) ->
       msg.send item.data.title + "\n" + item.data.url
 
 
