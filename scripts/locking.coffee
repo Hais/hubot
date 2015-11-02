@@ -39,11 +39,11 @@ thumbsUp = () ->
 
 module.exports = (robot) ->
 
-  robot.respond /^ls locks/i, (msg) ->
+  robot.respond /ls locks/i, (msg) ->
     response = "Locks:"
     for type of lockables
       do (type) ->
-        response += "\n"
+        response += "\n - "
         if isLocked(robot, type)
           response += "#{type}: Locked by #{getLock(robot, type).user} since #{getLock(robot, type).time.toString()}"
         else
