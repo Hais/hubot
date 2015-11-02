@@ -39,12 +39,24 @@ thumbsUp = () ->
 
 module.exports = (robot) ->
 
+  robot.respond /^ls locks/i, (msg) ->
+    response = "Locks:"
+    for type of lockables
+      do (type) ->
+        response += "\n"
+        if isLocked(robot, type):
+          response += "#{type}: Locked by #{getLock(robot, type).user} since #{getLock(robot, type).time.toString()}"
+        else
+          response += "#{type}: Not locked"
+
+    msg.reply response
+
   for type, matcher of lockables
     do (type, matcher) ->
 
       robot.hear (new RegExp(("^lock\\s+" + matcher), "i")), (msg) ->
         if isInDevRoom(msg)
-          if isLocked(robot, type)
+          if isLocked(robot, type):
             if getLock(robot, type).user == userCanonName(msg.message.user)
               msg.send "You've already got the lock you clown."
             else
