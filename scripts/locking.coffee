@@ -40,7 +40,7 @@ thumbsUp = () ->
 module.exports = (robot) ->
 
   robot.respond /ls locks/i, (msg) ->
-    response = "Locks:"
+    response = "Here you go:\n```"
     for type of lockables
       do (type) ->
         response += "\n - "
@@ -49,6 +49,7 @@ module.exports = (robot) ->
         else
           response += "#{type}: Not locked"
 
+    response += "\n```"
     msg.reply response
 
   for type, matcher of lockables
