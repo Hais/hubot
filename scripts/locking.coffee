@@ -17,16 +17,16 @@ userCanonName = (user) ->
   return user.name || user.real_name
 
 isInDevRoom = (msg) ->
-  return msg.message.room == 'dev-team'
+  return msg.message.room == 'clojurians'
 
 grantLock = (robot, type, user) ->
-  return robot.brain.set('dev-team-' + type + '-lock', {user: userCanonName(user), time: (new Date)})
+  return robot.brain.set('clojurians-' + type + '-lock', {user: userCanonName(user), time: (new Date)})
 
 getLock = (robot, type) ->
-  return robot.brain.get('dev-team-' + type + '-lock')
+  return robot.brain.get('clojurians-' + type + '-lock')
 
 releaseLock = (robot, type) ->
-  return robot.brain.remove('dev-team-' + type + '-lock')
+  return robot.brain.remove('clojurians-' + type + '-lock')
 
 isLocked = (robot, type) ->
   return !!getLock(robot, type)
