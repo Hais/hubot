@@ -55,7 +55,8 @@
     "lodash": "^3.10.1",
     "moment": "^2.10.6",
     "node-logentries": "^0.1.4",
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+    "verror": "^1.6.0"
   },
   "engines": {
     "node": "0.10.x"

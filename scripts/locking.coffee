@@ -3,6 +3,11 @@
 #
 # Author:
 #   s.doigsocialsuperstore.com
+#
+# Commands:
+#   hubot ls locks - list #clojurians environment locks
+#   lock <lock-name> - lock #clojurians lock
+#   unlock <lock-name> - unlock #clojurians lock
 
 lockables = {
   master: 'mast(er|a+)',
