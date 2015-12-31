@@ -70,10 +70,10 @@ module.exports = (robot) ->
           msg.reply 'Error: ' + err.message
         else
           serviceList = formatServices opts.services, result.commitDetails
-          response = "Pointed dark on #{opts.env} at : #{serviceList}\n"
-          response += formatCommit result.commitDetails
+          sha = result.commitDetails.sha.slice(0, 7)
+          response = "Complete:"
           _.forEach result.urls, (url, service) ->
-            response += "\n`#{service}: #{url}`"
+            response += "\n`#{service}@#{sha}`: `#{url}`"
 
           msg.reply response
 
@@ -88,9 +88,9 @@ module.exports = (robot) ->
           msg.reply 'Error: ' + err.message
         else
           serviceList = formatServices opts.services, result.commitDetails
-          response = "Pointed light on #{opts.env} at : #{serviceList}\n"
-          response += formatCommit result.commitDetails
+          sha = result.commitDetails.sha.slice(0, 7)
+          response = "Complete:"
           _.forEach result.urls, (url, service) ->
-            response += "\n`#{service}: #{url}`"
+            response += "\n`#{service}@#{sha}`: `#{url}`"
 
           msg.reply response
