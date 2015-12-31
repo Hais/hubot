@@ -55,6 +55,7 @@
     "lodash": "^3.10.1",
     "moment": "^2.10.6",
     "node-logentries": "^0.1.4",
+    "request": "^2.67.0",
     "underscore": "^1.8.3",
     "verror": "^1.6.0"
   },
