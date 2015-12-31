@@ -14,8 +14,10 @@ getOpts = (msg) -> {
     env: msg.match[3].trim()
   }
 
-shouldDeploy = (msg) ->
-  return (msg.message.room == 'Shell' or msg.message.room == 'tech-deploys' or msg.message.room == msg.message.user.name)
+shouldDeploy = (robot, msg) ->
+  room = msg.message.room
+  user = msg.message.user
+  return room == 'Shell' or (robot.auth.hasRole(user, 'deploy') and (room == 'tech-deploys' or room == user.name))
 
 formatCommit = (commitDetails) ->
   sha = commitDetails.sha.slice(0, 7)
@@ -32,7 +34,7 @@ formatServices = (services, commitDetails) ->
 module.exports = (robot) ->
 
   robot.hear /deploying (.*)@(.*) to (.*): create rc/i, (msg) ->
-    if (shouldDeploy msg)
+    if (shouldDeploy robot, msg)
       opts = getOpts msg
       pluralisation = if opts.services.length == 1 then '' else 's'
       msg.send "Creating replication controller#{pluralisation}..."
@@ -47,7 +49,7 @@ module.exports = (robot) ->
           msg.reply response
 
   robot.hear /deploying (.*)@(.*) to (.*): delete rc/i, (msg) ->
-    if (shouldDeploy msg)
+    if (shouldDeploy robot, msg)
       opts = getOpts msg
       pluralisation = if opts.services.length == 1 then '' else 's'
       msg.send "Deleting replication controller#{pluralisation}..."
@@ -60,7 +62,7 @@ module.exports = (robot) ->
           msg.reply "Deleted on #{opts.env}: #{serviceList}"
 
   robot.hear /deploying (.*)@(.*) to (.*): point dark/i, (msg) ->
-    if (shouldDeploy msg)
+    if (shouldDeploy robot, msg)
       opts = getOpts msg
       pluralisation = if opts.services.length == 1 then '' else 's'
       msg.send "Pointing dark service#{pluralisation}..."
@@ -78,7 +80,7 @@ module.exports = (robot) ->
           msg.reply response
 
   robot.hear /deploying (.*)@(.*) to (.*): point light/i, (msg) ->
-    if (shouldDeploy msg)
+    if (shouldDeploy robot, msg)
       opts = getOpts msg
       pluralisation = if opts.services.length == 1 then '' else 's'
       msg.send "Pointing light service#{pluralisation}..."

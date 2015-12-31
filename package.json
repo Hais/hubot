@@ -10,6 +10,7 @@
     "chrono-node": "^1.0.10",
     "htmlparser": "^1.7.7",
     "hubot": "~2.17.0",
+    "hubot-auth": "^1.2.0",
     "hubot-bitbucket-pr": "~0.2.0",
     "hubot-business-cat": "^1.3.0",
     "hubot-caffeine": "^0.1.0",
