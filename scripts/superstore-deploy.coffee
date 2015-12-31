@@ -10,8 +10,8 @@ _ = require('lodash')
 
 getOpts = (msg) -> {
     services: msg.match[1].replace(/[ ]/g, '').split(','),
-    version: msg.match[2],
-    env: msg.match[3]
+    version: msg.match[2].trim(),
+    env: msg.match[3].trim()
   }
 
 shouldDeploy = (msg) ->
@@ -31,7 +31,7 @@ formatServices = (services, commitDetails) ->
 
 module.exports = (robot) ->
 
-  robot.hear /create rc for (.*) at (.*) on (.*)/i, (msg) ->
+  robot.hear /deploying (.*)@(.*) to (.*): create rc/i, (msg) ->
     if (shouldDeploy msg)
       opts = getOpts msg
       pluralisation = if opts.services.length == 1 then '' else 's'
@@ -46,7 +46,7 @@ module.exports = (robot) ->
           response += formatCommit result.commitDetails
           msg.reply response
 
-  robot.hear /delete rc for (.*) at (.*) on (.*)/i, (msg) ->
+  robot.hear /deploying (.*)@(.*) to (.*): delete rc/i, (msg) ->
     if (shouldDeploy msg)
       opts = getOpts msg
       pluralisation = if opts.services.length == 1 then '' else 's'
@@ -59,7 +59,7 @@ module.exports = (robot) ->
           serviceList = formatServices opts.services, result.commitDetails
           msg.reply "Deleted on #{opts.env}: #{serviceList}"
 
-  robot.hear /point dark for (.*) at (.*) on (.*)/i, (msg) ->
+  robot.hear /deploying (.*)@(.*) to (.*): point dark/i, (msg) ->
     if (shouldDeploy msg)
       opts = getOpts msg
       pluralisation = if opts.services.length == 1 then '' else 's'
@@ -71,13 +71,13 @@ module.exports = (robot) ->
         else
           serviceList = formatServices opts.services, result.commitDetails
           sha = result.commitDetails.sha.slice(0, 7)
-          response = "Complete:"
+          response = "Repointed on #{opts.env}:"
           _.forEach result.urls, (url, service) ->
-            response += "\n`#{service}@#{sha}`: `#{url}`"
+            response += "\n`#{url}` → `#{service}@#{sha}`"
 
           msg.reply response
 
-  robot.hear /point light for (.*) at (.*) on (.*)/i, (msg) ->
+  robot.hear /deploying (.*)@(.*) to (.*): point light/i, (msg) ->
     if (shouldDeploy msg)
       opts = getOpts msg
       pluralisation = if opts.services.length == 1 then '' else 's'
@@ -89,8 +89,8 @@ module.exports = (robot) ->
         else
           serviceList = formatServices opts.services, result.commitDetails
           sha = result.commitDetails.sha.slice(0, 7)
-          response = "Complete:"
+          response = "Repointed on #{opts.env}:"
           _.forEach result.urls, (url, service) ->
-            response += "\n`#{service}@#{sha}`: `#{url}`"
+            response += "\n`#{url}` → `#{service}@#{sha}`"
 
           msg.reply response
