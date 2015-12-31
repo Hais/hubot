@@ -37,7 +37,7 @@ formatServices = (services, commitDetails) ->
 
 module.exports = (robot) ->
 
-  robot.hear /deploying (.*)@(.*) to (.*): create rc/i, (msg) ->
+  robot.hear /for (.*)@(.*) on (.*): create rc/i, (msg) ->
     if (shouldDeploy msg)
       unless isAllowed robot, msg
         msg.reply "Taking no action - please ask for permission"
@@ -55,7 +55,7 @@ module.exports = (robot) ->
             response += formatCommit result.commitDetails
             msg.reply response
 
-  robot.hear /deploying (.*)@(.*) to (.*): delete rc/i, (msg) ->
+  robot.hear /for (.*)@(.*) on (.*): delete rc/i, (msg) ->
     if (shouldDeploy msg)
       unless isAllowed robot, msg
         msg.reply "Taking no action - please ask for permission"
@@ -66,12 +66,12 @@ module.exports = (robot) ->
 
         deploy.deleteRC opts, (err, result) ->
           if (err)
-            msg.reply 'Error: ' + err.message
+            msg.reply "Error: ```#{err.message}```"
           else
             serviceList = formatServices opts.services, result.commitDetails
             msg.reply "Deleted on #{opts.env}: #{serviceList}"
 
-  robot.hear /deploying (.*)@(.*) to (.*): point dark/i, (msg) ->
+  robot.hear /for (.*)@(.*) on (.*): point dark/i, (msg) ->
     if (shouldDeploy msg)
       unless isAllowed robot, msg
         msg.reply "Taking no action - please ask for permission"
@@ -82,7 +82,7 @@ module.exports = (robot) ->
 
         deploy.pointDark opts, (err, result) ->
           if (err)
-            msg.reply 'Error: ' + err.message
+            msg.reply "Error: ```#{err.message}```"
           else
             serviceList = formatServices opts.services, result.commitDetails
             sha = result.commitDetails.sha.slice(0, 7)
@@ -92,7 +92,7 @@ module.exports = (robot) ->
 
             msg.reply response
 
-  robot.hear /deploying (.*)@(.*) to (.*): point light/i, (msg) ->
+  robot.hear /for (.*)@(.*) on (.*): point light/i, (msg) ->
     if (shouldDeploy msg)
       unless isAllowed robot, msg
         msg.reply "Taking no action - please ask for permission"
@@ -103,7 +103,7 @@ module.exports = (robot) ->
 
         deploy.pointLight opts, (err, result) ->
           if (err)
-            msg.reply 'Error: ' + err.message
+            msg.reply "Error: ```#{err.message}```"
           else
             serviceList = formatServices opts.services, result.commitDetails
             sha = result.commitDetails.sha.slice(0, 7)
@@ -112,3 +112,16 @@ module.exports = (robot) ->
               response += "\n`#{url}` → `#{service}@#{sha}`"
 
             msg.reply response
+
+  robot.hear /on (.*): kubectl (.*)/i, (msg) ->
+    if (shouldDeploy msg)
+      unless isAllowed robot, msg
+        msg.reply "Taking no action - please ask for permission"
+      else
+        env = msg.match[1]
+        args = msg.match[2]
+        deploy.kubectl env, args, (err, output) ->
+          if (err)
+            msg.reply "Error: ```#{err.message}```"
+
+          msg.send "```#{output}```"
