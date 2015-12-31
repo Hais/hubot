@@ -35,8 +35,19 @@ formatServices = (services, commitDetails) ->
 
   formatted.join(', ')
 
-module.exports = (robot) ->
+poll = (interval, timeout, f) ->
+  times = Math.floor(timeout / interval)
+  calls = _.times times, () -> f
 
+  makeCall = () ->
+    if calls.length > 0
+      call = calls.pop()
+      call()
+      setTimeout(makeCall, interval * 1000)
+
+  makeCall()
+
+module.exports = (robot) ->
   robot.hear /for (.*)@(.*) on (.*): create rc/i, (msg) ->
     if (shouldDeploy msg)
       unless isAllowed robot, msg
@@ -53,7 +64,14 @@ module.exports = (robot) ->
             serviceList = formatServices opts.services, result.commitDetails
             response = "Created on #{opts.env}: #{serviceList}\n"
             response += formatCommit result.commitDetails
-            msg.reply response
+            sent = msg.reply response
+
+            if sent.rawMessage && sent.rawMessage.updateMessage
+              forUpdate = msg.send "```...```"
+              poll 10, 120, () ->
+                deploy.kubectl opts.env, 'get pods', (err, output) ->
+                  if (!err)
+                    forUpdate.rawMessage.updateMessage output
 
   robot.hear /for (.*)@(.*) on (.*): delete rc/i, (msg) ->
     if (shouldDeploy msg)
