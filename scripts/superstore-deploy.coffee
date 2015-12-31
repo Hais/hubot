@@ -14,10 +14,14 @@ getOpts = (msg) -> {
     env: msg.match[3].trim()
   }
 
-shouldDeploy = (robot, msg) ->
+shouldDeploy = (msg) ->
   room = msg.message.room
   user = msg.message.user
-  return room == 'Shell' or (robot.auth.hasRole(user, 'deploy') and (room == 'tech-deploys' or room == user.name))
+  return room == 'Shell' or room == 'tech-deploys' or room == user.name
+
+isAllowed = (robot, msg) ->
+  user = msg.message.user
+  return robot.auth.hasRole(user, 'deploy')
 
 formatCommit = (commitDetails) ->
   sha = commitDetails.sha.slice(0, 7)
@@ -34,65 +38,77 @@ formatServices = (services, commitDetails) ->
 module.exports = (robot) ->
 
   robot.hear /deploying (.*)@(.*) to (.*): create rc/i, (msg) ->
-    if (shouldDeploy robot, msg)
-      opts = getOpts msg
-      pluralisation = if opts.services.length == 1 then '' else 's'
-      msg.send "Creating replication controller#{pluralisation}..."
+    if (shouldDeploy msg)
+      unless isAllowed robot, msg
+        msg.reply "Taking no action - please ask for permission"
+      else
+        opts = getOpts msg
+        pluralisation = if opts.services.length == 1 then '' else 's'
+        msg.send "Creating replication controller#{pluralisation}..."
 
-      deploy.createRC opts, (err, result) ->
-        if (err)
-          msg.reply "Error: ```#{err.message}```"
-        else
-          serviceList = formatServices opts.services, result.commitDetails
-          response = "Created on #{opts.env}: #{serviceList}\n"
-          response += formatCommit result.commitDetails
-          msg.reply response
+        deploy.createRC opts, (err, result) ->
+          if (err)
+            msg.reply "Error: ```#{err.message}```"
+          else
+            serviceList = formatServices opts.services, result.commitDetails
+            response = "Created on #{opts.env}: #{serviceList}\n"
+            response += formatCommit result.commitDetails
+            msg.reply response
 
   robot.hear /deploying (.*)@(.*) to (.*): delete rc/i, (msg) ->
-    if (shouldDeploy robot, msg)
-      opts = getOpts msg
-      pluralisation = if opts.services.length == 1 then '' else 's'
-      msg.send "Deleting replication controller#{pluralisation}..."
+    if (shouldDeploy msg)
+      unless isAllowed robot, msg
+        msg.reply "Taking no action - please ask for permission"
+      else
+        opts = getOpts msg
+        pluralisation = if opts.services.length == 1 then '' else 's'
+        msg.send "Deleting replication controller#{pluralisation}..."
 
-      deploy.deleteRC opts, (err, result) ->
-        if (err)
-          msg.reply 'Error: ' + err.message
-        else
-          serviceList = formatServices opts.services, result.commitDetails
-          msg.reply "Deleted on #{opts.env}: #{serviceList}"
+        deploy.deleteRC opts, (err, result) ->
+          if (err)
+            msg.reply 'Error: ' + err.message
+          else
+            serviceList = formatServices opts.services, result.commitDetails
+            msg.reply "Deleted on #{opts.env}: #{serviceList}"
 
   robot.hear /deploying (.*)@(.*) to (.*): point dark/i, (msg) ->
-    if (shouldDeploy robot, msg)
-      opts = getOpts msg
-      pluralisation = if opts.services.length == 1 then '' else 's'
-      msg.send "Pointing dark service#{pluralisation}..."
+    if (shouldDeploy msg)
+      unless isAllowed robot, msg
+        msg.reply "Taking no action - please ask for permission"
+      else
+        opts = getOpts msg
+        pluralisation = if opts.services.length == 1 then '' else 's'
+        msg.send "Pointing dark service#{pluralisation}..."
 
-      deploy.pointDark opts, (err, result) ->
-        if (err)
-          msg.reply 'Error: ' + err.message
-        else
-          serviceList = formatServices opts.services, result.commitDetails
-          sha = result.commitDetails.sha.slice(0, 7)
-          response = "Repointed on #{opts.env}:"
-          _.forEach result.urls, (url, service) ->
-            response += "\n`#{url}` → `#{service}@#{sha}`"
+        deploy.pointDark opts, (err, result) ->
+          if (err)
+            msg.reply 'Error: ' + err.message
+          else
+            serviceList = formatServices opts.services, result.commitDetails
+            sha = result.commitDetails.sha.slice(0, 7)
+            response = "Repointed on #{opts.env}:"
+            _.forEach result.urls, (url, service) ->
+              response += "\n`#{url}` → `#{service}@#{sha}`"
 
-          msg.reply response
+            msg.reply response
 
   robot.hear /deploying (.*)@(.*) to (.*): point light/i, (msg) ->
-    if (shouldDeploy robot, msg)
-      opts = getOpts msg
-      pluralisation = if opts.services.length == 1 then '' else 's'
-      msg.send "Pointing light service#{pluralisation}..."
+    if (shouldDeploy msg)
+      unless isAllowed robot, msg
+        msg.reply "Taking no action - please ask for permission"
+      else
+        opts = getOpts msg
+        pluralisation = if opts.services.length == 1 then '' else 's'
+        msg.send "Pointing light service#{pluralisation}..."
 
-      deploy.pointLight opts, (err, result) ->
-        if (err)
-          msg.reply 'Error: ' + err.message
-        else
-          serviceList = formatServices opts.services, result.commitDetails
-          sha = result.commitDetails.sha.slice(0, 7)
-          response = "Repointed on #{opts.env}:"
-          _.forEach result.urls, (url, service) ->
-            response += "\n`#{url}` → `#{service}@#{sha}`"
+        deploy.pointLight opts, (err, result) ->
+          if (err)
+            msg.reply 'Error: ' + err.message
+          else
+            serviceList = formatServices opts.services, result.commitDetails
+            sha = result.commitDetails.sha.slice(0, 7)
+            response = "Repointed on #{opts.env}:"
+            _.forEach result.urls, (url, service) ->
+              response += "\n`#{url}` → `#{service}@#{sha}`"
 
-          msg.reply response
+            msg.reply response
