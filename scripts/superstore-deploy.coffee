@@ -7,6 +7,7 @@
 git = require('../lib/superstore/git')
 deploy = require('../lib/superstore/deploy')
 _ = require('lodash')
+util = require('util')
 
 getOpts = (msg) -> {
     services: msg.match[1].replace(/[ ]/g, '').split(','),
@@ -35,19 +36,33 @@ formatServices = (services, commitDetails) ->
 
   formatted.join(', ')
 
-poll = (interval, timeout, f) ->
-  times = Math.floor(timeout / interval)
-  calls = _.times times, () -> f
+sendUpdates = (robot, msg, interval, duration, f) ->
+  end = Date.now() + duration * 1000 
+
+  sendMessage = msg.send.bind(msg)
+  counter = '.'
+  if robot.adapter.constructor.name == 'SlackBot'
+    sentMessage = null
+    sendMessage = (text) ->
+      if sentMessage
+        sentMessage.updateMessage(text)
+      else
+        sentMessage = _.first(robot.adapter.send msg.envelope, text)
 
   makeCall = () ->
-    if calls.length > 0
-      call = calls.pop()
-      call()
-      setTimeout(makeCall, interval * 1000)
+    f (err, text) ->
+      if (err)
+        sendMessage err.message
+      else
+        sendMessage "`#{counter}`\n#{text}"
+        if (Date.now() < end)
+          counter += '.'
+          setTimeout makeCall, (interval * 1000)
 
   makeCall()
 
 module.exports = (robot) ->
+
   robot.hear /for (.*)@(.*) on (.*): create rc/i, (msg) ->
     if (shouldDeploy msg)
       unless isAllowed robot, msg
@@ -64,14 +79,11 @@ module.exports = (robot) ->
             serviceList = formatServices opts.services, result.commitDetails
             response = "Created on #{opts.env}: #{serviceList}\n"
             response += formatCommit result.commitDetails
-            sent = msg.reply response
+            msg.reply response
 
-            if sent.rawMessage && sent.rawMessage.updateMessage
-              forUpdate = msg.send "```...```"
-              poll 10, 120, () ->
-                deploy.kubectl opts.env, 'get pods', (err, output) ->
-                  if (!err)
-                    forUpdate.rawMessage.updateMessage output
+            sendUpdates robot, msg, 5, 60, (cb) ->
+              deploy.kubectl opts.env, 'get pods', (err, output) ->
+                cb err, "```#{output}```"
 
   robot.hear /for (.*)@(.*) on (.*): delete rc/i, (msg) ->
     if (shouldDeploy msg)
@@ -88,6 +100,10 @@ module.exports = (robot) ->
           else
             serviceList = formatServices opts.services, result.commitDetails
             msg.reply "Deleted on #{opts.env}: #{serviceList}"
+
+            sendUpdates robot, msg, 5, 60, (cb) ->
+              deploy.kubectl opts.env, 'get pods', (err, output) ->
+                cb err, "```#{output}```"
 
   robot.hear /for (.*)@(.*) on (.*): point dark/i, (msg) ->
     if (shouldDeploy msg)
