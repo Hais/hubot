@@ -63,7 +63,7 @@ sendUpdates = (robot, msg, interval, duration, f) ->
 
 module.exports = (robot) ->
 
-  robot.hear /on (.*): create rc for (.*)@(.*)/i, (msg) ->
+  robot.hear /on (.*): ?create rc for (.*)@(.*)/i, (msg) ->
     if (shouldDeploy msg)
       unless isAllowed robot, msg
         msg.reply "Taking no action - please ask for permission"
@@ -85,7 +85,7 @@ module.exports = (robot) ->
               deploy.kubectl opts.env, 'get pods', (err, output) ->
                 cb err, "```#{output}```"
 
-  robot.hear /on (.*): delete rc for (.*)@(.*)/i, (msg) ->
+  robot.hear /on (.*): ?delete rc for (.*)@(.*)/i, (msg) ->
     if (shouldDeploy msg)
       unless isAllowed robot, msg
         msg.reply "Taking no action - please ask for permission"
@@ -105,7 +105,7 @@ module.exports = (robot) ->
               deploy.kubectl opts.env, 'get pods', (err, output) ->
                 cb err, "```#{output}```"
 
-  robot.hear /on (.*): migrate db@(.*)/i, (msg) ->
+  robot.hear /on (.*): ?migrate db@(.*)/i, (msg) ->
     if (shouldDeploy msg)
       unless isAllowed robot, msg
         msg.reply "Taking no action - please ask for permission"
@@ -129,7 +129,7 @@ module.exports = (robot) ->
               deploy.kubectl opts.env, 'get jobs -l name=db-migrator', (err, output) ->
                 cb err, "```#{output}```"
 
-  robot.hear /on (.*): point dark at (.*)@(.*)/i, (msg) ->
+  robot.hear /on (.*): ?point dark at (.*)@(.*)/i, (msg) ->
     if (shouldDeploy msg)
       unless isAllowed robot, msg
         msg.reply "Taking no action - please ask for permission"
@@ -150,7 +150,7 @@ module.exports = (robot) ->
 
             msg.reply response
 
-  robot.hear /on (.*): point light at (.*)@(.*)/i, (msg) ->
+  robot.hear /on (.*): ?point light at (.*)@(.*)/i, (msg) ->
     if (shouldDeploy msg)
       unless isAllowed robot, msg
         msg.reply "Taking no action - please ask for permission"
@@ -171,7 +171,7 @@ module.exports = (robot) ->
 
             msg.reply response
 
-  robot.hear /on (.*): kubectl get -w (.*)/i, (msg) ->
+  robot.hear /on (.*): ?kubectl get -w (.*)/i, (msg) ->
     if (shouldDeploy msg)
       unless isAllowed robot, msg
         msg.reply "Taking no action - please ask for permission"
@@ -186,7 +186,7 @@ module.exports = (robot) ->
           deploy.kubectl env, cmd, (err, output) ->
             cb err, "```#{output}```"
 
-  robot.hear /on (.*): kubectl (.*)/i, (msg) ->
+  robot.hear /on (.*): ?kubectl (.*)/i, (msg) ->
     if (shouldDeploy msg)
       unless isAllowed robot, msg
         msg.reply "Taking no action - please ask for permission"
