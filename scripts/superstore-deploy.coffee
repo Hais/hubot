@@ -10,9 +10,9 @@ _ = require('lodash')
 util = require('util')
 
 getOpts = (msg) -> {
-    services: msg.match[1].replace(/[ ]/g, '').split(','),
-    version: msg.match[2].trim(),
-    env: msg.match[3].trim()
+    env: msg.match[1].trim(),
+    services: msg.match[2].replace(/[ ]/g, '').split(','),
+    version: msg.match[3].trim(),
   }
 
 shouldDeploy = (msg) ->
@@ -63,7 +63,7 @@ sendUpdates = (robot, msg, interval, duration, f) ->
 
 module.exports = (robot) ->
 
-  robot.hear /for (.*)@(.*) on (.*): create rc/i, (msg) ->
+  robot.hear /on (.*): create rc for (.*)@(.*)/i, (msg) ->
     if (shouldDeploy msg)
       unless isAllowed robot, msg
         msg.reply "Taking no action - please ask for permission"
@@ -81,11 +81,11 @@ module.exports = (robot) ->
             response += formatCommit result.commitDetails
             msg.reply response
 
-            sendUpdates robot, msg, 5, 60, (cb) ->
+            sendUpdates robot, msg, 5, 120, (cb) ->
               deploy.kubectl opts.env, 'get pods', (err, output) ->
                 cb err, "```#{output}```"
 
-  robot.hear /for (.*)@(.*) on (.*): delete rc/i, (msg) ->
+  robot.hear /on (.*): delete rc for (.*)@(.*)/i, (msg) ->
     if (shouldDeploy msg)
       unless isAllowed robot, msg
         msg.reply "Taking no action - please ask for permission"
@@ -101,11 +101,35 @@ module.exports = (robot) ->
             serviceList = formatServices opts.services, result.commitDetails
             msg.reply "Deleted on #{opts.env}: #{serviceList}"
 
-            sendUpdates robot, msg, 5, 60, (cb) ->
+            sendUpdates robot, msg, 5, 120, (cb) ->
               deploy.kubectl opts.env, 'get pods', (err, output) ->
                 cb err, "```#{output}```"
 
-  robot.hear /for (.*)@(.*) on (.*): point dark/i, (msg) ->
+  robot.hear /on (.*): migrate db@(.*)/i, (msg) ->
+    if (shouldDeploy msg)
+      unless isAllowed robot, msg
+        msg.reply "Taking no action - please ask for permission"
+      else
+        env = msg.match[1]
+        version = msg.match[2]
+        opts = {
+          env: msg.match[1],
+          version: msg.match[2]
+        }
+        msg.send "Migrating db..."
+
+        deploy.migrateDB opts, (err, result) ->
+          if (err)
+            msg.reply "Error: ```#{err.message}```"
+          else
+            serviceList = formatServices opts.services, result.commitDetails
+            msg.reply "DB migration scheduled"
+
+            sendUpdates robot, msg, 5, 120, (cb) ->
+              deploy.kubectl opts.env, 'get jobs -l db-migration-job', (err, output) ->
+                cb err, "```#{output}```"
+
+  robot.hear /on (.*): point dark at (.*)@(.*)/i, (msg) ->
     if (shouldDeploy msg)
       unless isAllowed robot, msg
         msg.reply "Taking no action - please ask for permission"
@@ -126,7 +150,7 @@ module.exports = (robot) ->
 
             msg.reply response
 
-  robot.hear /for (.*)@(.*) on (.*): point light/i, (msg) ->
+  robot.hear /on (.*): point light at (.*)@(.*)/i, (msg) ->
     if (shouldDeploy msg)
       unless isAllowed robot, msg
         msg.reply "Taking no action - please ask for permission"
