@@ -171,6 +171,21 @@ module.exports = (robot) ->
 
             msg.reply response
 
+  robot.hear /on (.*): kubectl get -w (.*)/i, (msg) ->
+    if (shouldDeploy msg)
+      unless isAllowed robot, msg
+        msg.reply "Taking no action - please ask for permission"
+      else
+        msg.finish
+
+        env = msg.match[1]
+        args = msg.match[2]
+
+        cmd = 'get ' + args
+        sendUpdates robot, msg, 5, 120, (cb) ->
+          deploy.kubectl env, cmd, (err, output) ->
+            cb err, "```#{output}```"
+
   robot.hear /on (.*): kubectl (.*)/i, (msg) ->
     if (shouldDeploy msg)
       unless isAllowed robot, msg
