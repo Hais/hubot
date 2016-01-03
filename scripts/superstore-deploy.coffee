@@ -126,7 +126,7 @@ module.exports = (robot) ->
             msg.reply "DB migration scheduled"
 
             sendUpdates robot, msg, 5, 120, (cb) ->
-              deploy.kubectl opts.env, 'get jobs -l name=db-migration-job', (err, output) ->
+              deploy.kubectl opts.env, 'get jobs -l name=db-migrator', (err, output) ->
                 cb err, "```#{output}```"
 
   robot.hear /on (.*): point dark at (.*)@(.*)/i, (msg) ->
