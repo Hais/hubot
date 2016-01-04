@@ -37,7 +37,7 @@ formatServices = (services, commitDetails) ->
   formatted.join(', ')
 
 sendUpdates = (robot, msg, interval, duration, f) ->
-  end = Date.now() + duration * 1000 
+  end = Date.now() + duration * 1000
 
   sendMessage = msg.send.bind(msg)
   counter = '.'
