@@ -11,7 +11,7 @@ util = require('util')
 
 getOpts = (msg) -> {
     env: msg.match[1].trim(),
-    services: msg.match[2].replace(/[ ]/g, '').split(','),
+    apps: msg.match[2].replace(/[ ]/g, '').split(','),
     version: msg.match[3].trim(),
   }
 
@@ -29,9 +29,9 @@ formatCommit = (commitDetails) ->
   commitMessage = commitDetails.commit.message
   return "`* #{sha} #{commitMessage}`"
 
-formatServices = (services, commitDetails) ->
+formatApps = (apps, commitDetails) ->
   sha = commitDetails.sha.slice(0, 7)
-  formatted = _.map services, (s) ->
+  formatted = _.map apps, (s) ->
     "`#{s}@#{sha}`"
 
   formatted.join(', ')
@@ -69,15 +69,15 @@ module.exports = (robot) ->
         msg.reply "Taking no action - please ask for permission"
       else
         opts = getOpts msg
-        pluralisation = if opts.services.length == 1 then '' else 's'
+        pluralisation = if opts.apps.length == 1 then '' else 's'
         msg.send "Creating replication controller#{pluralisation}..."
 
         deploy.createRC opts, (err, result) ->
           if (err)
             msg.reply "Error: ```#{err.message}```"
           else
-            serviceList = formatServices opts.services, result.commitDetails
-            response = "Created on #{opts.env}: #{serviceList}\n"
+            appList = formatApps opts.apps, result.commitDetails
+            response = "Created on #{opts.env}: #{appList}\n"
             response += formatCommit result.commitDetails
             msg.reply response
 
@@ -91,15 +91,15 @@ module.exports = (robot) ->
         msg.reply "Taking no action - please ask for permission"
       else
         opts = getOpts msg
-        pluralisation = if opts.services.length == 1 then '' else 's'
+        pluralisation = if opts.apps.length == 1 then '' else 's'
         msg.send "Deleting replication controller#{pluralisation}..."
 
         deploy.deleteRC opts, (err, result) ->
           if (err)
             msg.reply "Error: ```#{err.message}```"
           else
-            serviceList = formatServices opts.services, result.commitDetails
-            msg.reply "Deleted on #{opts.env}: #{serviceList}"
+            appList = formatApps opts.apps, result.commitDetails
+            msg.reply "Deleted on #{opts.env}: #{appList}"
 
             sendUpdates robot, msg, 5, 120, (cb) ->
               deploy.kubectl opts.env, 'get pods', (err, output) ->
@@ -122,7 +122,7 @@ module.exports = (robot) ->
           if (err)
             msg.reply "Error: ```#{err.message}```"
           else
-            serviceList = formatServices opts.services, result.commitDetails
+            appList = formatApps opts.apps, result.commitDetails
             msg.reply "DB migration scheduled"
 
             sendUpdates robot, msg, 5, 120, (cb) ->
@@ -135,18 +135,18 @@ module.exports = (robot) ->
         msg.reply "Taking no action - please ask for permission"
       else
         opts = getOpts msg
-        pluralisation = if opts.services.length == 1 then '' else 's'
+        pluralisation = if opts.apps.length == 1 then '' else 's'
         msg.send "Pointing dark service#{pluralisation}..."
 
         deploy.pointDark opts, (err, result) ->
           if (err)
             msg.reply "Error: ```#{err.message}```"
           else
-            serviceList = formatServices opts.services, result.commitDetails
+            appList = formatApps opts.apps, result.commitDetails
             sha = result.commitDetails.sha.slice(0, 7)
             response = "Repointed on #{opts.env}:"
-            _.forEach result.urls, (url, service) ->
-              response += "\n`#{url}` → `#{service}@#{sha}`"
+            _.forEach result.urls, (url, app) ->
+              response += "\n`#{url}` → `#{app}@#{sha}`"
 
             msg.reply response
 
@@ -156,18 +156,18 @@ module.exports = (robot) ->
         msg.reply "Taking no action - please ask for permission"
       else
         opts = getOpts msg
-        pluralisation = if opts.services.length == 1 then '' else 's'
+        pluralisation = if opts.apps.length == 1 then '' else 's'
         msg.send "Pointing light service#{pluralisation}..."
 
         deploy.pointLight opts, (err, result) ->
           if (err)
             msg.reply "Error: ```#{err.message}```"
           else
-            serviceList = formatServices opts.services, result.commitDetails
+            appList = formatApps opts.apps, result.commitDetails
             sha = result.commitDetails.sha.slice(0, 7)
             response = "Repointed on #{opts.env}:"
-            _.forEach result.urls, (url, service) ->
-              response += "\n`#{url}` → `#{service}@#{sha}`"
+            _.forEach result.urls, (url, app) ->
+              response += "\n`#{url}` → `#{app}@#{sha}`"
 
             msg.reply response
 
