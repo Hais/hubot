@@ -2,7 +2,7 @@
 #   Locking magic
 #
 # Author:
-#   s.doigsocialsuperstore.com
+#   s.doig@socialsuperstore.com
 #
 # Commands:
 #   hubot ls locks - list #clojurians environment locks
@@ -10,9 +10,10 @@
 #   unlock <lock-name> - unlock #clojurians lock
 
 lockables = {
-  master: 'mast(er|a+)',
+  master: '(b|m)ast(ard|er|a+)',
   beta1: 'beta1',
-  beta2: 'beta2'
+  beta2: 'beta2',
+  beta3: 'beta3'
 }
 
 userDisplayName = (user) ->
