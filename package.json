@@ -15,6 +15,7 @@
     "hubot-caffeine": "^0.1.0",
     "hubot-calculator": "~0.4.0",
     "hubot-clj": "0.0.5",
+    "hubot-cool-ascii-faces": "^1.2.0",
     "hubot-cron": "^0.2.9",
     "hubot-darksky": "~1.0.2",
     "hubot-diagnostics": "0.0.1",
