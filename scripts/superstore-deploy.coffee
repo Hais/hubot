@@ -36,11 +36,18 @@ formatApps = (apps, commitDetails) ->
 
   formatted.join(', ')
 
+displayProgress = (duration, end) ->
+  start = end - (duration * 1000)
+  size = 20
+  hashes = Math.floor (((Date.now() - start) / (duration * 1000)) * size)
+  underscores = size - hashes
+  output = ["["].concat('#' for hash in [0...hashes]).concat('_' for underscore in [0...underscores]).concat(["]"])
+  output.join ""
+
 sendUpdates = (robot, msg, interval, duration, f) ->
   end = Date.now() + duration * 1000
 
   sendMessage = msg.send.bind(msg)
-  counter = '.'
   if robot.adapter.constructor.name == 'SlackBot'
     sentMessage = null
     sendMessage = (text) ->
@@ -54,9 +61,9 @@ sendUpdates = (robot, msg, interval, duration, f) ->
       if (err)
         sendMessage err.message
       else
-        sendMessage "`#{counter}`\n#{text}"
+        progress = displayProgress duration, end
+        sendMessage "`#{progress}`\n#{text}"
         if (Date.now() < end)
-          counter += '.'
           setTimeout makeCall, (interval * 1000)
 
   makeCall()
