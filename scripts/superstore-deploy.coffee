@@ -197,4 +197,5 @@ module.exports = (robot) ->
           if (err)
             msg.reply "Error: ```#{err.message}```"
 
-          msg.send "```#{output}```"
+          if (output)
+            msg.send "```#{output}```"
