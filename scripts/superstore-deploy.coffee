@@ -32,7 +32,7 @@ formatCommit = (commitDetails) ->
 formatApps = (apps, commitDetails) ->
   sha = commitDetails.sha.slice(0, 7)
   formatted = _.map apps, (s) ->
-    "```#{s}@#{sha}```"
+    "`#{s}@#{sha}`"
 
   formatted.join(', ')
 
