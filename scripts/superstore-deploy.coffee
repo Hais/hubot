@@ -218,9 +218,15 @@ module.exports = (robot) ->
         env = msg.match[1]
         cluster = msg.match[2]
         args = msg.match[3]
-        deploy.kubectl env, [cluster], args, (err, output) ->
+        deploy.kubectl env, [cluster], args, (err, output, errOutput) ->
           if (err)
-            msg.reply "Error: ```#{err.message}```"
+            if err.message
+              msg.reply "Error: ```#{err.message}```"
+            if output
+              msg.reply "Error: ```#{output}```"
+
+          if (errOutput)
+            msg.reply "Error: ```#{errOutput}```"
 
           if (output)
             msg.send "```#{output}```"
