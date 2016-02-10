@@ -98,7 +98,7 @@ module.exports = (robot) ->
                     if (err)
                       cb err, "```#{consumersOutput}```"
                     else
-                      cb err, "```#{appOutput}\n#{consumersOutput}```"
+                      cb err, "```#{appOutput}#{consumersOutput}```"
 
   robot.hear /on (.*): ?delete rcs?(?: (?:for|at))? (\S*)@(\S*)/i, (msg) ->
     if (shouldDeploy msg)
@@ -126,7 +126,7 @@ module.exports = (robot) ->
                     if (err)
                       cb err, "```#{consumersOutput}```"
                     else
-                      cb err, "```#{appOutput}\n#{consumersOutput}```"
+                      cb err, "```#{appOutput}#{consumersOutput}```"
 
   robot.hear /on (.*): ?migrate db@(.*)/i, (msg) ->
     if (shouldDeploy msg)
