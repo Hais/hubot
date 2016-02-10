@@ -89,8 +89,16 @@ module.exports = (robot) ->
             msg.reply response
 
             sendUpdates robot, msg, 5, 120, (cb) ->
-              deploy.kubectl opts.env, 'get pods', (err, output) ->
-                cb err, "```#{output}```"
+              deploy.kubectl opts.env, ['a1', 'b1'], 'get pods', (err, appOutput) ->
+                if (err)
+                  cb err, "```#{appOutput}```"
+                else
+                  sha = result.commitDetails.sha.slice(0, 7)
+                  deploy.kubectl opts.env, ['consumers'], "get rc df-consumer#{sha}", (err, consumersOutput) ->
+                    if (err)
+                      cb err, "```#{consumersOutput}```"
+                    else
+                      cb err, "```#{appOutput}\n#{consumersOutput}```"
 
   robot.hear /on (.*): ?delete rcs?(?: (?:for|at))? (\S*)@(\S*)/i, (msg) ->
     if (shouldDeploy msg)
@@ -109,8 +117,16 @@ module.exports = (robot) ->
             msg.reply "Deleted on #{opts.env}: #{appList}"
 
             sendUpdates robot, msg, 5, 120, (cb) ->
-              deploy.kubectl opts.env, 'get pods', (err, output) ->
-                cb err, "```#{output}```"
+              deploy.kubectl opts.env, ['a1', 'b1'], 'get pods', (err, appOutput) ->
+                if (err)
+                  cb err, "```#{appOutput}```"
+                else
+                  sha = result.commitDetails.sha.slice(0, 7)
+                  deploy.kubectl opts.env, ['consumers'], "get rc df-consumer#{sha}", (err, consumersOutput) ->
+                    if (err)
+                      cb err, "```#{consumersOutput}```"
+                    else
+                      cb err, "```#{appOutput}\n#{consumersOutput}```"
 
   robot.hear /on (.*): ?migrate db@(.*)/i, (msg) ->
     if (shouldDeploy msg)
@@ -133,7 +149,7 @@ module.exports = (robot) ->
             msg.reply "DB migration scheduled"
 
             sendUpdates robot, msg, 5, 120, (cb) ->
-              deploy.kubectl opts.env, 'get jobs -l name=db-migrator', (err, output) ->
+              deploy.kubectl opts.env, ['a1', 'b1'], 'get jobs -l name=db-migrator', (err, output) ->
                 cb err, "```#{output}```"
 
   robot.hear /on (.*): ?point dark(?: (?:for|at))? (\S*)@(\S*)/i, (msg) ->
@@ -178,7 +194,7 @@ module.exports = (robot) ->
 
             msg.reply response
 
-  robot.hear /on (.*): ?kubectl get -w (.*)/i, (msg) ->
+  robot.hear /on (.*)-(.*): ?kubectl get -w (.*)/i, (msg) ->
     if (shouldDeploy msg)
       unless isAllowed robot, msg
         msg.reply "Taking no action - please ask for permission"
@@ -186,21 +202,23 @@ module.exports = (robot) ->
         msg.finish
 
         env = msg.match[1]
-        args = msg.match[2]
+        cluster = msg.match[2]
+        args = msg.match[3]
 
         cmd = 'get ' + args
         sendUpdates robot, msg, 5, 120, (cb) ->
-          deploy.kubectl env, cmd, (err, output) ->
+          deploy.kubectl env, [cluster], cmd, (err, output) ->
             cb err, "```#{output}```"
 
-  robot.hear /on (.*): ?kubectl (.*)/i, (msg) ->
+  robot.hear /on (.*)-(.*): ?kubectl (.*)/i, (msg) ->
     if (shouldDeploy msg)
       unless isAllowed robot, msg
         msg.reply "Taking no action - please ask for permission"
       else
         env = msg.match[1]
-        args = msg.match[2]
-        deploy.kubectl env, args, (err, output) ->
+        cluster = msg.match[2]
+        args = msg.match[3]
+        deploy.kubectl env, [cluster], args, (err, output) ->
           if (err)
             msg.reply "Error: ```#{err.message}```"
 
