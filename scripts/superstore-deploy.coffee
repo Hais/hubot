@@ -94,7 +94,7 @@ module.exports = (robot) ->
                   cb err, "```#{appOutput}```"
                 else
                   sha = result.commitDetails.sha.slice(0, 7)
-                  deploy.kubectl opts.env, ['consumers'], "get rc df-consumer#{sha}", (err, consumersOutput) ->
+                  deploy.kubectl opts.env, ['consumers'], "get rc df-consumer-#{sha}", (err, consumersOutput) ->
                     if (err)
                       cb err, "```#{consumersOutput}```"
                     else
@@ -122,7 +122,7 @@ module.exports = (robot) ->
                   cb err, "```#{appOutput}```"
                 else
                   sha = result.commitDetails.sha.slice(0, 7)
-                  deploy.kubectl opts.env, ['consumers'], "get rc df-consumer#{sha}", (err, consumersOutput) ->
+                  deploy.kubectl opts.env, ['consumers'], "get rc df-consumer-#{sha}", (err, consumersOutput) ->
                     if (err)
                       cb err, "```#{consumersOutput}```"
                     else
