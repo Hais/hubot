@@ -44,7 +44,7 @@ displayProgress = (duration, end) ->
   output = ["["].concat('#' for hash in [0...hashes]).concat('_' for underscore in [0...underscores]).concat(["]"])
   output.join ""
 
-sendUpdates = (robot, msg, interval, duration, f) ->
+sendUpdates = (robot, msg, interval, duration, env) ->
   end = Date.now() + duration * 1000
 
   sendMessage = msg.send.bind(msg)
@@ -57,12 +57,17 @@ sendUpdates = (robot, msg, interval, duration, f) ->
         sentMessage = _.first(robot.adapter.send msg.envelope, text)
 
   makeCall = () ->
-    f (err, text) ->
+    deploy.showOverview {env: env}, (err, result) ->
+      text = ""
       if (err)
-        sendMessage err.message
+        msg.reply "Error: ```#{err.message}```"
+      else if (result.stderr)
+        msg.reply "Error: ```#{result.stderr}```"
+      else if (!result.stdout)
+        msg.reply "No output - looks like nothing is scheduled?"
       else
         progress = displayProgress duration, end
-        sendMessage "`#{progress}`\n#{text}"
+        sendMessage "`#{progress}`\n```#{result.stdout}```"
         if (Date.now() < end)
           setTimeout makeCall, (interval * 1000)
 
@@ -88,17 +93,7 @@ module.exports = (robot) ->
             response += formatCommit result.commitDetails
             msg.reply response
 
-            sendUpdates robot, msg, 5, 240, (cb) ->
-              deploy.kubectl opts.env, ['a1', 'b1'], 'get pods', (err, appOutput) ->
-                if (err)
-                  cb err, "```#{appOutput}```"
-                else
-                  sha = result.commitDetails.sha.slice(0, 7)
-                  deploy.kubectl opts.env, ['consumers'], "get rc df-consumer-#{sha}", (err, consumersOutput) ->
-                    if (err)
-                      cb err, "```#{consumersOutput}```"
-                    else
-                      cb err, "```#{appOutput}#{consumersOutput}```"
+            sendUpdates robot, msg, 5, 240, opts.env
 
   robot.hear /on (.*): ?delete rcs?(?: (?:for|at))? (\S*)@ ?(\S*)/i, (msg) ->
     if (shouldDeploy msg)
@@ -116,17 +111,7 @@ module.exports = (robot) ->
             appList = formatApps opts.apps, result.commitDetails
             msg.reply "Deleted on #{opts.env}: #{appList}"
 
-            sendUpdates robot, msg, 5, 240, (cb) ->
-              deploy.kubectl opts.env, ['a1', 'b1'], 'get pods', (err, appOutput) ->
-                if (err)
-                  cb err, "```#{appOutput}```"
-                else
-                  sha = result.commitDetails.sha.slice(0, 7)
-                  deploy.kubectl opts.env, ['consumers'], "get rc df-consumer-#{sha}", (err, consumersOutput) ->
-                    if (err)
-                      cb err, "```#{consumersOutput}```"
-                    else
-                      cb err, "```#{appOutput}#{consumersOutput}```"
+            sendUpdates robot, msg, 5, 240, opts.env
 
   robot.hear /on (.*): ?migrate db@ ?(.*)/i, (msg) ->
     if (shouldDeploy msg)
@@ -148,9 +133,7 @@ module.exports = (robot) ->
             appList = formatApps opts.apps, result.commitDetails
             msg.reply "DB migration scheduled"
 
-            sendUpdates robot, msg, 5, 240, (cb) ->
-              deploy.kubectl opts.env, ['a1', 'b1'], 'get jobs -l name=db-migrator', (err, output) ->
-                cb err, "```#{output}```"
+            sendUpdates robot, msg, 5, 240, opts.env
 
   robot.hear /on (.*): ?point dark(?: (?:for|at))? (\S*)@ ?(\S*)/i, (msg) ->
     if (shouldDeploy msg)
@@ -200,16 +183,7 @@ module.exports = (robot) ->
         msg.reply "Taking no action - please ask for permission"
       else
         env = msg.match[1]
-
-        deploy.showOverview {env: env}, (err, result) ->
-          if (err)
-            msg.reply "Error: ```#{err.message}```"
-          else if (result.stderr)
-            msg.reply "Error: ```#{result.stderr}```"
-          else if (result.stdout)
-            msg.reply "```#{result.stdout}```"
-          else
-            msg.reply "No output - looks like nothing is scheduled?"
+        sendUpdates robot, msg, 5, 240, env
 
   robot.hear /on (.*)-(.*): ?kubectl get -w (.*)/i, (msg) ->
     if (shouldDeploy msg)
@@ -217,15 +191,7 @@ module.exports = (robot) ->
         msg.reply "Taking no action - please ask for permission"
       else
         msg.finish
-
-        env = msg.match[1]
-        cluster = msg.match[2]
-        args = msg.match[3]
-
-        cmd = 'get ' + args
-        sendUpdates robot, msg, 5, 240, (cb) ->
-          deploy.kubectl env, [cluster], cmd, (err, output) ->
-            cb err, "```#{output}```"
+        msg.send "`get -w` not supported, use `show overview` or skip the `-w` flag"
 
   robot.hear /on (.*)-(.*): ?kubectl (.*)/i, (msg) ->
     if (shouldDeploy msg)
