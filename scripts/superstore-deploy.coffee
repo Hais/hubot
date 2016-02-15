@@ -70,7 +70,7 @@ sendUpdates = (robot, msg, interval, duration, f) ->
 
 module.exports = (robot) ->
 
-  robot.hear /on (.*): ?create rcs?(?: (?:for|at))? (\S*)@(\S*)/i, (msg) ->
+  robot.hear /on (.*): ?create rcs?(?: (?:for|at))? (\S*)@ ?(\S*)/i, (msg) ->
     if (shouldDeploy msg)
       unless isAllowed robot, msg
         msg.reply "Taking no action - please ask for permission"
@@ -100,7 +100,7 @@ module.exports = (robot) ->
                     else
                       cb err, "```#{appOutput}#{consumersOutput}```"
 
-  robot.hear /on (.*): ?delete rcs?(?: (?:for|at))? (\S*)@(\S*)/i, (msg) ->
+  robot.hear /on (.*): ?delete rcs?(?: (?:for|at))? (\S*)@ ?(\S*)/i, (msg) ->
     if (shouldDeploy msg)
       unless isAllowed robot, msg
         msg.reply "Taking no action - please ask for permission"
@@ -128,7 +128,7 @@ module.exports = (robot) ->
                     else
                       cb err, "```#{appOutput}#{consumersOutput}```"
 
-  robot.hear /on (.*): ?migrate db@(.*)/i, (msg) ->
+  robot.hear /on (.*): ?migrate db@ ?(.*)/i, (msg) ->
     if (shouldDeploy msg)
       unless isAllowed robot, msg
         msg.reply "Taking no action - please ask for permission"
@@ -152,7 +152,7 @@ module.exports = (robot) ->
               deploy.kubectl opts.env, ['a1', 'b1'], 'get jobs -l name=db-migrator', (err, output) ->
                 cb err, "```#{output}```"
 
-  robot.hear /on (.*): ?point dark(?: (?:for|at))? (\S*)@(\S*)/i, (msg) ->
+  robot.hear /on (.*): ?point dark(?: (?:for|at))? (\S*)@ ?(\S*)/i, (msg) ->
     if (shouldDeploy msg)
       unless isAllowed robot, msg
         msg.reply "Taking no action - please ask for permission"
@@ -173,7 +173,7 @@ module.exports = (robot) ->
 
             msg.reply response
 
-  robot.hear /on (.*): ?point light(?: (?:for|at))? (\S*)@(\S*)/i, (msg) ->
+  robot.hear /on (.*): ?point light(?: (?:for|at))? (\S*)@ ?(\S*)/i, (msg) ->
     if (shouldDeploy msg)
       unless isAllowed robot, msg
         msg.reply "Taking no action - please ask for permission"
@@ -193,6 +193,23 @@ module.exports = (robot) ->
               response += "\n`#{url}` → `#{app}@#{sha}`"
 
             msg.reply response
+
+  robot.hear /on (.*): ?show overview/i, (msg) ->
+    if (shouldDeploy msg)
+      unless isAllowed robot, msg
+        msg.reply "Taking no action - please ask for permission"
+      else
+        env = msg.match[1]
+
+        deploy.showOverview {env: env}, (err, result) ->
+          if (err)
+            msg.reply "Error: ```#{err.message}```"
+          else if (result.stderr)
+            msg.reply "Error: ```#{result.stderr}```"
+          else if (result.stdout)
+            msg.reply "```#{result.stdout}```"
+          else
+            msg.reply "No output - looks like nothing is scheduled?"
 
   robot.hear /on (.*)-(.*): ?kubectl get -w (.*)/i, (msg) ->
     if (shouldDeploy msg)
