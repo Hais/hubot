@@ -38,7 +38,7 @@ formatApps = (apps, commitDetails) ->
 
 displayProgress = (duration, end) ->
   start = end - (duration * 1000)
-  size = 20
+  size = 40
   hashes = Math.floor (((Date.now() - start) / (duration * 1000)) * size)
   underscores = size - hashes
   output = ["["].concat('#' for hash in [0...hashes]).concat('_' for underscore in [0...underscores]).concat(["]"])
@@ -88,7 +88,7 @@ module.exports = (robot) ->
             response += formatCommit result.commitDetails
             msg.reply response
 
-            sendUpdates robot, msg, 5, 120, (cb) ->
+            sendUpdates robot, msg, 5, 240, (cb) ->
               deploy.kubectl opts.env, ['a1', 'b1'], 'get pods', (err, appOutput) ->
                 if (err)
                   cb err, "```#{appOutput}```"
@@ -116,7 +116,7 @@ module.exports = (robot) ->
             appList = formatApps opts.apps, result.commitDetails
             msg.reply "Deleted on #{opts.env}: #{appList}"
 
-            sendUpdates robot, msg, 5, 120, (cb) ->
+            sendUpdates robot, msg, 5, 240, (cb) ->
               deploy.kubectl opts.env, ['a1', 'b1'], 'get pods', (err, appOutput) ->
                 if (err)
                   cb err, "```#{appOutput}```"
@@ -148,7 +148,7 @@ module.exports = (robot) ->
             appList = formatApps opts.apps, result.commitDetails
             msg.reply "DB migration scheduled"
 
-            sendUpdates robot, msg, 5, 120, (cb) ->
+            sendUpdates robot, msg, 5, 240, (cb) ->
               deploy.kubectl opts.env, ['a1', 'b1'], 'get jobs -l name=db-migrator', (err, output) ->
                 cb err, "```#{output}```"
 
@@ -206,7 +206,7 @@ module.exports = (robot) ->
         args = msg.match[3]
 
         cmd = 'get ' + args
-        sendUpdates robot, msg, 5, 120, (cb) ->
+        sendUpdates robot, msg, 5, 240, (cb) ->
           deploy.kubectl env, [cluster], cmd, (err, output) ->
             cb err, "```#{output}```"
 
