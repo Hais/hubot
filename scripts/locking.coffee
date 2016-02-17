@@ -13,7 +13,8 @@ lockables = {
   master: '(b|m|p)ast(ard|er|a+)',
   beta1: 'beta1',
   beta2: 'beta2',
-  beta3: 'beta3'
+  beta3: 'beta3',
+  couch: 'couch|zzz|bed'
 }
 
 userDisplayName = (user) ->
