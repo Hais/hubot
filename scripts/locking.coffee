@@ -62,7 +62,7 @@ module.exports = (robot) ->
   for type, matcher of lockables
     do (type, matcher) ->
 
-      robot.hear (new RegExp(("^lock\\s+" + matcher), "i")), (msg) ->
+      robot.hear (new RegExp(("^(lock|can i haz)\\s+" + matcher), "i")), (msg) ->
         if isInDevRoom(msg)
           if isLocked(robot, type)
             if getLock(robot, type).user == userCanonName(msg.message.user)
