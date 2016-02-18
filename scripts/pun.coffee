@@ -15,7 +15,7 @@
 
 module.exports = (robot) ->
 
-  robot.hear /pun (.*)/i, (msg) ->
+  robot.respond /pun( me)? (.*)/i, (msg) ->
     robot.http("dadjokes.org/pun/" + msg.match[1] + "/json")
     .get() (err, res, body) ->
       return if err
