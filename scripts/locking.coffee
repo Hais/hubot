@@ -56,6 +56,9 @@ module.exports = (robot) ->
         else
           response += "#{type}: Not locked"
 
+    if not isInDevRoom(msg)
+      response += "\n\n You're not in the dev room though, you clown."
+
     response += "\n```"
     msg.reply response
 
