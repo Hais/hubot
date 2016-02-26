@@ -5,6 +5,7 @@
   "hubot-help",
   "hubot-google-images",
   "hubot-google-translate",
+  "hubot-impersonate",
   "hubot-pugme",
   "hubot-maps",
   "hubot-redis-brain",
