@@ -47,7 +47,7 @@ thumbsUp = () ->
 
 module.exports = (robot) ->
 
-  robot.respond /ls locks/i, (msg) ->
+  robot.respond /(ls)|(suck) (l|c)ocks/i, (msg) ->
     response = "Here you go:\n```"
     for type of lockables
       do (type) ->
