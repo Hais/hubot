@@ -72,7 +72,7 @@ module.exports = (robot) ->
             if getLock(robot, type).user == userCanonName(msg.message.user)
               msg.send "You've already got the lock you clown."
             else
-              msg.send "No can do! " + getLock(robot, type).user + " has had the lock since " + getLock(robot, type).time.toString() + "!"
+              msg.send "No can do! @" + getLock(robot, type).user + " has had the lock since " + getLock(robot, type).time.toString() + "!"
           else
             grantLock(robot, type, msg.message.user)
             msg.send thumbsUp()
@@ -91,7 +91,7 @@ module.exports = (robot) ->
       robot.respond (new RegExp(("unlock\\s+" + matcher), "i")), (msg) ->
         if isInDevRoom(msg)
           if isLocked(robot, type)
-            msg.reply "Forcing unlock of " + type + " lock acquired by " + getLock(robot, type).user + " at " + getLock(robot, type).time.toString() + ".  He better not give me any shit."
+            msg.reply "Forcing unlock of " + type + " lock acquired by @" + getLock(robot, type).user + " at " + getLock(robot, type).time.toString() + ".  He better not give me any shit."
             releaseLock(robot, type)
           else
             msg.reply "Nobody told me about a lock.  Going back to sleep."
