@@ -70,9 +70,9 @@ module.exports = (robot) ->
         if isInDevRoom(msg)
           if isLocked(robot, type)
             if getLock(robot, type).user == userCanonName(msg.message.user)
-              msg.send "You've already got the lock you clown."
+              msg.send "`IllegalMonitorStateException: You've already got the lock you clown.`"
             else
-              msg.send "No can do! @" + getLock(robot, type).user + " has had the lock since " + getLock(robot, type).time.toString() + "!"
+              msg.send "`IllegalMonitorStateException: No can do! @" + getLock(robot, type).user + " has had the lock since " + getLock(robot, type).time.toString() + ".`"
           else
             grantLock(robot, type, msg.message.user)
             msg.send thumbsUp()
@@ -84,14 +84,14 @@ module.exports = (robot) ->
               releaseLock(robot, type)
               msg.send thumbsUp()
             else
-              msg.send "Nice try " + userDisplayName(msg.message.user) + ", but you don't own this lock. " + getLock(robot, type).user + " does."
+              msg.send "`IllegalMonitorStateException: Nice try " + userDisplayName(msg.message.user) + ", but you don't own this lock. " + getLock(robot, type).user + " does.`"
           else
-            msg.send "Nobody told me about a lock.  Going back to sleep."
+            msg.send "`IllegalMonitorStateException: Nobody told me about a lock. Going back to sleep.`"
 
       robot.respond (new RegExp(("unlock\\s+" + matcher), "i")), (msg) ->
         if isInDevRoom(msg)
           if isLocked(robot, type)
-            msg.reply "Forcing unlock of " + type + " lock acquired by @" + getLock(robot, type).user + " at " + getLock(robot, type).time.toString() + ".  He better not give me any shit."
+            msg.reply "Forcing unlock of " + type + " lock acquired by @" + getLock(robot, type).user + " at " + getLock(robot, type).time.toString() + ". He better not give me any shit."
             releaseLock(robot, type)
           else
-            msg.reply "Nobody told me about a lock.  Going back to sleep."
+            msg.reply "`IllegalMonitorStateException: Nobody told me about a lock. Going back to sleep.`"
