@@ -10,7 +10,7 @@
 #   unlock <lock-name> - unlock #clojurians lock
 
 lockables = {
-  master: 'h?a?(b|m|p)(ei)?a*?sa?t(ard|er|a+)|gandalf',
+  master: 'h?a?(b|m|p)(ei)?a*?s?a?t(ard|e|er|a+)|gandalf',
   beta1: 'beta1',
   beta2: 'beta2',
   beta3: 'beta3',
@@ -66,7 +66,7 @@ module.exports = (robot) ->
   for type, matcher of lockables
     do (type, matcher) ->
 
-      robot.hear (new RegExp(("^((s|l)ock|can i haz|i can haz)\\s+" + matcher), "i")), (msg) ->
+      robot.hear (new RegExp(("^((s|l)o(o|c)k|can i haz|i can haz|wtf)\\s+" + matcher), "i")), (msg) ->
         if isInDevRoom(msg)
           if isLocked(robot, type)
             if getLock(robot, type).user == userCanonName(msg.message.user)
