@@ -77,7 +77,7 @@ module.exports = (robot) ->
             grantLock(robot, type, msg.message.user)
             msg.send thumbsUp()
 
-      robot.hear (new RegExp(("^(kthx|unlock(ing)?|releas(e|ing)|wtf)\\s+" + matcher), "i")), (msg) ->
+      robot.hear (new RegExp(("^(kthx|unlock(ing)?|releas(e|ing)|bonza)\\s+" + matcher), "i")), (msg) ->
         if isInDevRoom(msg)
           if isLocked(robot, type)
             if getLock(robot, type).user == userCanonName(msg.message.user)
