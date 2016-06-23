@@ -88,7 +88,7 @@ module.exports = (robot) ->
           else
             msg.send "`IllegalMonitorStateException: Nobody told me about a lock. Going back to sleep.`"
 
-      robot.respond (new RegExp(("^(kthx|unlock(ing)?|releas(e|ing))\\s+" + matcher), "i")), (msg) ->
+      robot.respond (new RegExp(("(kthx|unlock(ing)?|releas(e|ing))\\s+" + matcher), "i")), (msg) ->
         if isInDevRoom(msg)
           if isLocked(robot, type)
             msg.reply "Forcing unlock of " + type + " lock acquired by @" + getLock(robot, type).user + " at " + getLock(robot, type).time.toString() + ". He better not give me any shit."
