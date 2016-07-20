@@ -14,7 +14,6 @@ lockables = {
   beta1: 'beta1',
   beta2: 'beta2',
   beta3: 'beta3',
-  'one-store': 'one-(store|direction)',
   live: '(live|prod)',
   couch: '(couch|zzz|bed)'
 }
