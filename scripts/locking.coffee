@@ -10,7 +10,7 @@
 #   unlock <lock-name> - unlock #clojurians lock
 
 lockables = {
-  master: 'h?a?(?!.*beta).*(b|m|p)l?(e|i)*?(i|e)*?a*?s?a?(te)?r?a*?(rd)?|gandalf',
+  master: '(h?a?(?!.*beta).*(b|m|p)l?(e|i)*?(i|e)*?a*?s?a?(te)?r?a*?(rd)?|gandalf)',
   beta1: 'beta1',
   beta2: 'beta2',
   beta3: 'beta3',
