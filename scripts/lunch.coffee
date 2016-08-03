@@ -26,7 +26,7 @@ module.exports = (robot) ->
        mikey: ['coffee', 'that one sandwich', 'nothing']
        daniel: ['salad bar', 'soup']
        keigo: ['bench', 'potsu'],
-       lee: ['salad bar','bench soup']
+       lee: ['salad bar', 'bench soup']
     if (lunches[user] == undefined && msg.match[1] == "me")
       msg.send "No lunches defined for you, you will have to go hungry"
     else if (lunches[user] == undefined && msg.match[1] != "me")
