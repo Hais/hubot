@@ -15,9 +15,21 @@
 
 module.exports = (robot) ->
 
-  robot.hear /lunch me/, (msg) ->
-    lunches = [
-      'chicken katsu curry'
-      'pizza'
-    ]
-    msg.send msg.random lunches
+  robot.hear /lunch (.*)/, (msg) ->
+    if msg.match[1]=="me"
+      user=msg.message.user.name
+    else
+      user=msg.match[1]
+
+    lunches =
+       bronsa: ['chicken katsu curry', 'pizza']
+       mikey: ['coffee']
+       daniel: ['salad bar', 'soup']
+       keigo: ['bench', 'potsu'],
+       lee: ['salad bar','bench soup']
+    if (lunches[user] == undefined && msg.match[1] == "me")
+      msg.send "No lunches defined for you, you will have to go hungry"
+    else if (lunches[user] == undefined && msg.match[1] != "me")
+      msg.send "No lunches defined for " + user + " they will have to go hungry"
+    else
+      msg.send msg.random lunches[user]
