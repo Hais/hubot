@@ -22,8 +22,8 @@ module.exports = (robot) ->
       user=msg.match[1]
 
     lunches =
-       bronsa: ['chicken katsu curry', 'pizza']
-       mikey: ['coffee']
+       bronsa: ['chicken katsu curry', 'pizza', 'a Clojure JIRA ticket']
+       mikey: ['coffee', 'that one sandwich', 'nothing']
        daniel: ['salad bar', 'soup']
        keigo: ['bench', 'potsu'],
        lee: ['salad bar','bench soup']
