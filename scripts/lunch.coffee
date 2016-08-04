@@ -36,7 +36,7 @@ module.exports = (robot) ->
          thursday: ["something nice from that market near lazy bones"]
          friday: ["salad bar", "soup", "sainsbury's meal deal", "try and rouse people into a pub lunch"]
        dave:
-         default: ["lamb and halloumi box","a cheeky nandos", "vape juice", "devops card"]
+         default: ["lamb and halloumi box", "a cheeky nandos", "vape juice", "a devops card"]
        james:
          default: ["pret a manger sandwich", "coco de mama pasta", "subway"]
        keigo:
