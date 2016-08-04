@@ -28,17 +28,22 @@ module.exports = (robot) ->
 
     lunches =
        bronsa:
-         default: ['chicken katsu curry', 'pizza', 'a Clojure JIRA ticket']
+         default: ["chicken katsu curry", "pizza", "a Clojure JIRA ticket"]
        mikey:
-         default: ['coffee', 'that one sandwich', 'nothing']
+         default: ["coffee", "that one sandwich", "nothing"]
        daniel:
-         default: ['salad bar', 'soup']
-         thursday: ['something nice from that market near lazy bones']
-         friday: ['salad bar', 'soup', 'meal deal', 'try and rouse people into a pub lunch']
+         default: ["salad bar", "soup", "meal deal", "rice bowl"]
+         thursday: ["something nice from that market near lazy bones"]
+         friday: ["salad bar", "soup", "sainsbury's meal deal", "try and rouse people into a pub lunch"]
+       dave:
+         default: ["lamb and halloumi box","a cheeky nandos", "vape juice", "devops card"]
+       james:
+         default: ["pret a manger sandwich", "coco de mama pasta", "subway"]
        keigo:
-         default: ['pretend to get soup from bench but switch to salad and quiche', 'potsu'],
+         default: ["pretend to get soup from bench but switch to salad and quiche", "potsu"],
+         thursday: ["something nice from that market near lazy bones"]
        lee:
-         default: ['salad bar', 'bench soup']
+         default: ["salad bar", "bench soup", "tom yum soup", "lamb and halloumi box"]
 
     if (lunches[user] == undefined && msg.match[1] == "me")
       msg.send "No lunches defined for you, you will have to go hungry"
