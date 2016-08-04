@@ -35,8 +35,10 @@ module.exports = (robot) ->
          default: ['salad bar', 'soup']
          thursday: ['something nice from that market near lazy bones']
          friday: ['salad bar', 'soup', 'meal deal', 'try and rouse people into a pub lunch']
-       keigo: ['bench', 'potsu'],
-       lee: ['salad bar', 'bench soup']
+       keigo:
+         default: ['pretend to get soup from bench but switch to salad and quiche', 'potsu'],
+       lee:
+         default: ['salad bar', 'bench soup']
 
     if (lunches[user] == undefined && msg.match[1] == "me")
       msg.send "No lunches defined for you, you will have to go hungry"
