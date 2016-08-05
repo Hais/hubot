@@ -35,6 +35,9 @@ module.exports = (robot) ->
          default: ["salad bar", "soup", "meal deal", "rice bowl"]
          thursday: ["something nice from that market near lazy bones"]
          friday: ["salad bar", "soup", "sainsbury's meal deal", "try and rouse people into a pub lunch"]
+       george:
+         default: ["bench", "i dunno, a burger or something"]
+         thursday: ["something nice from that market near lazy bones. and doughnuts."]
        dave:
          default: ["lamb and halloumi box", "coco de mama pasta", "pret a manger sandwich", "a cheeky nandos", "vape juice", "a devops card", ":jenkins_is_angry:"]
        james:
