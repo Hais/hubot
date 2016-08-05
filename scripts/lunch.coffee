@@ -42,6 +42,9 @@ module.exports = (robot) ->
          default: ["lamb and halloumi box", "coco de mama pasta", "pret a manger sandwich", "a cheeky nandos", "vape juice", "a devops card", ":jenkins_is_angry:"]
        james:
          default: ["pret a manger sandwich", "coco de mama pasta", "subway"]
+       tomcruise:
+         default: ["salad bar", "hmm... salad bar"]
+         monday: ["boots o2 special"]
        keigo:
          default: ["pretend to get soup from bench but switch to salad and quiche", "potsu"],
          thursday: ["something nice from that market near lazy bones"]
