@@ -42,7 +42,7 @@ module.exports = (robot) ->
        keigo:
          default: ["pretend to get soup from bench but switch to salad and quiche", "potsu"],
          thursday: ["something nice from that market near lazy bones"]
-       lee:
+       mrlee:
          default: ["salad bar", "bench soup", "tom yum soup", "lamb and halloumi box"]
 
     if (lunches[user] == undefined && msg.match[1] == "me")
