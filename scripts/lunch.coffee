@@ -15,7 +15,7 @@
 
 module.exports = (robot) ->
 
-  robot.hear /lunch (.*)/, (msg) ->
+  robot.respond /lunch (.*)/, (msg) ->
 
     today = new Date
     days= ["sunday","monday","tuesday","wednesday","thursday","friday","saturday"]
