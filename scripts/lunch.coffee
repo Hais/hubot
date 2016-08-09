@@ -47,6 +47,9 @@ module.exports = (robot) ->
          monday: ["boots o2 special"]
        vaunus:
          default: ["celery", "celery and hummus", "avocado and celery", "avocado on its own"]
+      matt:
+        default: ["lamb and halloumi box", "tom yum soup"]
+        thursday: ["something from that market near lazy bones"]
        keigo:
          default: ["pretend to get soup from bench but switch to salad and quiche", "potsu"],
          thursday: ["something nice from that market near lazy bones"]
