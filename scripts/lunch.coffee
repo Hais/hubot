@@ -28,7 +28,7 @@ module.exports = (robot) ->
 
     lunches =
        bronsa:
-         default: ["chicken katsu curry", "pizza", "a Clojure JIRA ticket"]
+         default: ["chicken katsu curry", "pizza", "a Clojure JIRA ticket", ":derp:", ":rettag soup"]
        mikey:
          default: ["coffee", "that one sandwich", "nothing"]
        daniel:
