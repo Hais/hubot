@@ -29,5 +29,6 @@
   "hubot-suggest",
   "hubot-cron",
   "hubot-fliptable",
-  "hubot-cool-ascii-faces"
+  "hubot-cool-ascii-faces",
+  "hubot-sentimental"
 ]
