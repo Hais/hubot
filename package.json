@@ -30,7 +30,6 @@
     "hubot-http-status": "~0.2.1",
     "hubot-humanity": "~0.1.3",
     "hubot-maps": "0.0.2",
-    "hubot-impersonate": "2.0.0",
     "hubot-mute": "0.0.9",
     "hubot-nationalrail": "0.0.2",
     "hubot-newrelic2": "^0.2.5",
