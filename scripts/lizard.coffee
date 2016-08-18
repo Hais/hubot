@@ -21,7 +21,7 @@ module.exports = (robot) ->
   "https://thrivedebunked.files.wordpress.com/2012/02/icke-header.jpg",
   "https://i.ytimg.com/vi/vL1qMW81VUA/maxresdefault.jpg"]
 
-  robot.hear /(?!^hubot)(lizard|icke|ilumin.*)/, (msg) ->
+  robot.hear /^(?!hubot)(lizard|icke|ilumin.*)/, (msg) ->
    msg.send msg.random quality_david_icke_pics
 
   robot.respond /lizard (me )?(.*)/i, (msg) ->
