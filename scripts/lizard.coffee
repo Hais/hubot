@@ -9,7 +9,12 @@ module.exports = (robot) ->
   "http://www.zengardner.com/wp-content/uploads/David-Icke-Quote-23-640x470.jpg",
   "http://www.stuartwilde.com/img_2011/david_icke.jpg",
   "http://2.bp.blogspot.com/-hFwIOSZyrU0/Tpy3-gILPcI/AAAAAAAABV8/uZzsTTumKgw/s1600/cameron_is_a_lizard_desktop.jpg",
-  "http://www.thesundaytimes.co.uk/sto/multimedia/dynamic/00349/STG16ICKE1_349596k.jpg"]
+  "http://www.thesundaytimes.co.uk/sto/multimedia/dynamic/00349/STG16ICKE1_349596k.jpg",
+  "http://www.neonnettle.com/feed/images/david-icke_1117962c.jpg",
+  "https://anti-nwo.dk/wilderdk/bin/images/david_icke_secrets_of_the_matrix_2003_0.jpg",
+  "http://www.complottisti.com/wp-content/uploads/2015/12/POLICE_STATE_NWO_2014_David_Icke__161412.jpg",
+  "http://justenergyradio.com/wp-content/uploads/2016/03/David-Icke.jpg",
+  "http://api.ning.com/files/Rcd9iMr-jpbaB26iFBsdfG2RyB77-agKiuVpxE62Z7KCTmBt6PWkkkfoQ6o6Ljoq-vVyU2kPE**oZ*sIycJ-GQz7iKuqgcok/icke.jpeg"]
 
   robot.hear /(lizard|icke|ilumin.*)/, (msg) ->
    msg.send msg.random quality_david_icke_pics
