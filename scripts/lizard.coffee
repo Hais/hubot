@@ -11,5 +11,5 @@ module.exports = (robot) ->
   "http://2.bp.blogspot.com/-hFwIOSZyrU0/Tpy3-gILPcI/AAAAAAAABV8/uZzsTTumKgw/s1600/cameron_is_a_lizard_desktop.jpg",
   "http://www.thesundaytimes.co.uk/sto/multimedia/dynamic/00349/STG16ICKE1_349596k.jpg"]
 
-  robot.hear /lizard/, (msg) ->
+  robot.hear /(lizard|icke|ilumin.*)/, (msg) ->
    msg.send msg.random quality_david_icke_pics
