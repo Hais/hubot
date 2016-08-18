@@ -14,7 +14,12 @@ module.exports = (robot) ->
   "https://anti-nwo.dk/wilderdk/bin/images/david_icke_secrets_of_the_matrix_2003_0.jpg",
   "http://www.complottisti.com/wp-content/uploads/2015/12/POLICE_STATE_NWO_2014_David_Icke__161412.jpg",
   "http://justenergyradio.com/wp-content/uploads/2016/03/David-Icke.jpg",
-  "http://api.ning.com/files/Rcd9iMr-jpbaB26iFBsdfG2RyB77-agKiuVpxE62Z7KCTmBt6PWkkkfoQ6o6Ljoq-vVyU2kPE**oZ*sIycJ-GQz7iKuqgcok/icke.jpeg"]
+  "http://api.ning.com/files/Rcd9iMr-jpbaB26iFBsdfG2RyB77-agKiuVpxE62Z7KCTmBt6PWkkkfoQ6o6Ljoq-vVyU2kPE**oZ*sIycJ-GQz7iKuqgcok/icke.jpeg",
+  "http://whale.to/c/bransonicke87c.jpg",
+  "https://www.infiniteloveforum.com/download/file.php?id=466",
+  "https://missiongalacticfreedom.files.wordpress.com/2014/06/david-icke-bbff.jpg?w=540&h=245",
+  "https://thrivedebunked.files.wordpress.com/2012/02/icke-header.jpg",
+  "https://i.ytimg.com/vi/vL1qMW81VUA/maxresdefault.jpg"]
 
   robot.hear /(lizard|icke|ilumin.*)/, (msg) ->
    msg.send msg.random quality_david_icke_pics
