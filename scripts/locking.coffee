@@ -15,7 +15,7 @@ lockables = {
   beta2: 'beta2',
   beta3: 'beta3',
   live: '(live|prod)',
-  couch: '(couch|zzz|bed)'
+  "those desks where the couch used to be": '(couch|zzz|bed)'
 }
 
 userDisplayName = (user) ->
