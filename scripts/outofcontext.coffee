@@ -44,7 +44,7 @@ appendQuote = (robot, user, message) ->
   robot.brain.data.oocQuotes = data if fresh
 
 removeQuote = (robot, user, message) ->
-  data = qetQuotes(robot)
+  data = getQuotes(robot)
   index = data[user.name].indexOf(message)
   data[user.name] = data[user.name].slice(index, 1)
 
