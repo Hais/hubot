@@ -96,8 +96,9 @@ module.exports = (robot) ->
 
   robot.respond /outofcontext|ooc rm (.*): (.*)/i, (msg) ->
     findUser robot, msg, msg.match[1], (user) ->
-      removeQuote(robot, user, msg.match[2])
-      msg.send "Quote has been removed from historical records."
+      # removeQuote(robot, user, msg.match[2])
+      # msg.send "Quote has been removed from historical records."
+      msg.send "The past is already written. The ink is dry."
 
   robot.respond /outofcontext|ooc ls (.*)/i, (msg) ->
     findUser robot, msg, msg.match[1], (user) ->
