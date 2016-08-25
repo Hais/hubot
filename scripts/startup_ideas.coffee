@@ -30,7 +30,7 @@ module.exports = (robot) ->
   robot.respond /dir/i, (msg) ->
     listing = ""
     for k, v of robot.brain.data.ideas
-      listing = listing + k + " (" + v.length + ") \n"
+      listing = listing + k + ".txt (" + v.length + ") \n"
     msg.send "```" + listing + "```"
 
   robot.respond /cat \`?(.*)\`?\.txt/i, (msg) ->
