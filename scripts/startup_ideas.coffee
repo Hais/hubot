@@ -27,6 +27,10 @@ module.exports = (robot) ->
     robot.brain.data.ideas[msg.match[1]] || = []
     robot.brain.data.ideas[msg.match[1]].push last_message
 
+  robot.respond /ls/i, (msg) ->
+    for k, v of robot.brain.data.ideas
+      msg.send "`" + k + "` (" + v.length + ")"
+
   robot.respond /cat \`?(.*)\`?\.txt/i, (msg) ->
     if (ideas = robot.brain.data.ideas[msg.match[1]])
       msg.send "`" + msg.match[1] + ".txt`"
