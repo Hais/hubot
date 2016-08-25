@@ -27,7 +27,7 @@ module.exports = (robot) ->
     robot.brain.data.ideas[msg.match[1]] || = []
     robot.brain.data.ideas[msg.match[1]].push last_message
 
-  robot.respond /ls (?!locks)/i, (msg) ->
+  robot.respond /dir/i, (msg) ->
     for k, v of robot.brain.data.ideas
       msg.send "`" + k + " (" + v.length + ")`"
 
