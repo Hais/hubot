@@ -28,8 +28,10 @@ module.exports = (robot) ->
     robot.brain.data.ideas[msg.match[1]].push last_message
 
   robot.respond /dir/i, (msg) ->
+    listing = ""
     for k, v of robot.brain.data.ideas
-      msg.send "`" + k + " (" + v.length + ")`"
+      listing = listing + k + " (" + v.length + ") \n"
+    msg.send "```" + listing + "```"
 
   robot.respond /cat \`?(.*)\`?\.txt/i, (msg) ->
     if (ideas = robot.brain.data.ideas[msg.match[1]])
