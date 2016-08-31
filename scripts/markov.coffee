@@ -16,7 +16,7 @@
 delimeters = /\s+|,\s*|\.\s*/
 start = "{{{START}}}"
 stop = "{{{STOP}}}"
-users_whitelist = ["keigo", "bronsa", "daniel", "mikey", "james", "lee", "george", "dave", "Shell"]
+users_whitelist = ["keigo", "bronsa", "daniel", "mikey", "james", "mrlee", "george", "dave", "Shell"]
 
 store_markov = (username, msg) ->
   robot.brain.data.markov[username] || = {}
