@@ -88,13 +88,13 @@ module.exports = (robot) ->
     robot.brain.data.oocQuotes ||= {}
     robot.brain.data.oocRandomness ||= 88
 
-  robot.respond /outofcontext|ooc (?!rm )(.*): (.*)/i, (msg) ->
+  robot.respond /outofcontext|ooc (?!rm )(.*?): (.*)/i, (msg) ->
     findUser robot, msg, msg.match[1], (user) ->
       #return msg.send "Denied. You narcissist." if user.name == msg.message.user.name
       appendQuote robot, user, msg.match[2]
       msg.send "Quote has been stored for future prosperity."
 
-  robot.respond /outofcontext|ooc rm (.*): (.*)/i, (msg) ->
+  robot.respond /outofcontext|ooc rm (.*?): (.*)/i, (msg) ->
     findUser robot, msg, msg.match[1], (user) ->
       # removeQuote(robot, user, msg.match[2])
       # msg.send "Quote has been removed from historical records."
