@@ -16,7 +16,7 @@
 delimeters = /\s+|,\s*|\.\s*/
 start = "{{{START}}}"
 stop = "{{{STOP}}}"
-users_whitelist = ["keigo", "bronsa", "daniel", "mikey", "james", "mrlee", "george", "dave", "shell", "hubot"]
+users_whitelist = ["keigo", "bronsa", "daniel", "mikey", "james", "mrlee", "george", "dave", "shell", "hubot", "hais"]
 rooms_whitelist = ["clojurians", "developers", "general"]
 
 store_markov = (username, msg) ->
