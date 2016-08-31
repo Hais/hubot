@@ -47,7 +47,6 @@ module.exports = (robot) ->
     robot.brain.data.markov || = {}
 
   robot.hear /(.*)/i, (msg) ->
-    msg.send msg.message.user.name
     if msg.message.user.name in users_whitelist
       store_markov(msg.message.user.name, msg.match[1])
 
