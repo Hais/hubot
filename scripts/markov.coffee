@@ -16,9 +16,10 @@
 delimeters = /\s+|,\s*|\.\s*/
 start = "{{{START}}}"
 stop = "{{{STOP}}}"
-users_whitelist = ["keigo", "bronsa", "daniel", "mikey", "james", "mrlee", "george", "dave", "Shell", "hubot"]
+users_whitelist = ["keigo", "bronsa", "daniel", "mikey", "james", "mrlee", "george", "dave", "shell", "hubot"]
 
 store_markov = (username, msg) ->
+  username = username.toLowerCase()
   robot.brain.data.markov[username] || = {}
   markov = robot.brain.data.markov[username]
   previous_word = start
@@ -30,6 +31,7 @@ store_markov = (username, msg) ->
 
 
 generate_markov = (username) ->
+  username = username.toLowerCase()
   word = start
   sentence = ""
   markov = robot.brain.data.markov[username]
@@ -47,8 +49,9 @@ module.exports = (robot) ->
     robot.brain.data.markov || = {}
 
   robot.hear /(.*)/i, (msg) ->
-    if msg.message.user.name in users_whitelist
-      store_markov(msg.message.user.name, msg.match[1])
+    username = msg.message.user.name.toLowerCase()
+    if username in users_whitelist
+      store_markov(username, msg.match[1])
 
   robot.respond /mimic (.*)/i, (msg) ->
     msg.send generate_markov(msg.match[1])
