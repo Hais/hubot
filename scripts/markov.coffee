@@ -51,7 +51,7 @@ module.exports = (robot) ->
 
   robot.hear /(.*)/i, (msg) ->
     username = msg.message.user.name.toLowerCase()
-    if username in users_whitelist and msg.message.room in rooms_whitelist and !msg.message.text.startsWith "--"
+    if username in users_whitelist and msg.message.room in rooms_whitelist and !msg.message.text.startsWith "--" and !msg.message.text.startsWith "hubot"
       store_markov(username, msg.message.text)
 
   robot.respond /mimic (.*)/i, (msg) ->
