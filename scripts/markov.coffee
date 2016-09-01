@@ -17,7 +17,7 @@ delimiters = /\s+|,\s*|\.\s*|\s*```.*```\s*/
 start = "{{{START}}}"
 stop = "{{{STOP}}}"
 users_whitelist = ["keigo", "bronsa", "daniel", "mikey", "james", "mrlee", "george", "dave", "shell", "hubot", "hais", "github", "jenkins"]
-rooms_whitelist = ["clojurians", "developers", "general", "wat"]
+rooms_whitelist = ["clojurians", "developers", "general", "wat", "tech-builds", "webapp-commits"]
 
 store_markov = (username, msg) ->
   username = username.toLowerCase()
