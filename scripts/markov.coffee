@@ -51,8 +51,8 @@ module.exports = (robot) ->
 
   robot.hear /(.*)/i, (msg) ->
     username = msg.message.user.name.toLowerCase()
-    if !msg.message.text.startsWith "--" and !msg.message.text.startsWith "hubot"
-      store_markov(username, msg.message.text)
+    if (!msg.message.text.startsWith "--") and (!msg.message.text.startsWith "hubot")
+       store_markov(username, msg.message.text)
 
   robot.respond /mimic (.*)/i, (msg) ->
     username = msg.match[1].toLowerCase().replace(/^@/, "")
