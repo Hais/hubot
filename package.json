@@ -12,6 +12,7 @@
     "hubot": "~2.17.0",
     "hubot-auth": "^1.2.0",
     "hubot-bitbucket-pr": "~0.5.1",
+    "hubot-brain-inspect": "0.0.1",
     "hubot-caffeine": "^0.1.0",
     "hubot-calculator": "~0.4.0",
     "hubot-clj": "0.0.5",

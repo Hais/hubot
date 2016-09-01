@@ -8,6 +8,7 @@
   "hubot-pugme",
   "hubot-maps",
   "hubot-redis-brain",
+  "hubot-brain-inspect",
   "hubot-rules",
   "hubot-shipit",
   "hubot-youtube",
