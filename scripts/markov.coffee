@@ -43,6 +43,9 @@ generate_markov = (username) ->
     word = next_word
   return sentence
 
+erase_markov = (username) ->
+  robot.brain.data.markov[username] = {}
+
 module.exports = (robot) ->
   robot.brain.on 'loaded', =>
     robot.brain.data.markov || = {}
@@ -55,3 +58,7 @@ module.exports = (robot) ->
   robot.respond /mimic (.*)/i, (msg) ->
     username = msg.match[1].toLowerCase().replace(/^@/, "")
     msg.send generate_markov(username)
+
+  robot.respond /unmimic (.*)/i, (msg) ->
+    username = msg.match[1].toLowerCase().replace(/^@/, "")
+      erase_markov(username)
