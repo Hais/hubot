@@ -1,3 +1,20 @@
+# Description:
+#   Fuckin' thing sucks
+#
+# Dependencies:
+#   None
+#
+# Configuration:
+#   None
+#
+# Commands:
+#   pirate <text>
+#   talk pirate
+#   talk english
+#
+# Author:
+#   hais
+#
 
 
 async = require 'async'
