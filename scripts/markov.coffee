@@ -13,7 +13,7 @@
 # Author:
 #   daniel
 #
-delimeters = /\s+|,\s*|\.\s*|\s*```.*```\s*/
+delimiters = /\s+|,\s*|\.\s*|\s*```.*```\s*/
 start = "{{{START}}}"
 stop = "{{{STOP}}}"
 users_whitelist = ["keigo", "bronsa", "daniel", "mikey", "james", "mrlee", "george", "dave", "shell", "hubot", "hais", "github", "jenkins"]
@@ -24,7 +24,7 @@ store_markov = (username, msg) ->
   robot.brain.data.markov[username] || = {}
   markov = robot.brain.data.markov[username]
   previous_word = start
-  words = msg.split delimeters
+  words = msg.split delimiters
   for word in words.concat stop
     markov[previous_word] ||= []
     markov[previous_word].push(word)
