@@ -16,8 +16,6 @@
 delimiters = /\s+|,\s*|\.\s*|\s*```.*```\s*/
 start = "{{{START}}}"
 stop = "{{{STOP}}}"
-users_whitelist = ["keigo", "bronsa", "daniel", "mikey", "james", "mrlee", "george", "dave", "shell", "hubot", "hais", "github", "jenkins"]
-rooms_whitelist = ["clojurians", "developers", "general", "wat", "tech-builds", "webapp-commits"]
 
 store_markov = (username, msg) ->
   username = username.toLowerCase()
@@ -51,7 +49,7 @@ module.exports = (robot) ->
 
   robot.hear /(.*)/i, (msg) ->
     username = msg.message.user.name.toLowerCase()
-    if username in users_whitelist and msg.message.room in rooms_whitelist and !msg.message.text.startsWith "--" and !msg.message.text.startsWith "hubot"
+    if !msg.message.text.startsWith "--" and !msg.message.text.startsWith "hubot"
       store_markov(username, msg.message.text)
 
   robot.respond /mimic (.*)/i, (msg) ->
