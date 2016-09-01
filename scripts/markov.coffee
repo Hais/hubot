@@ -28,7 +28,6 @@ store_markov = (username, msg) ->
     markov[previous_word].push(word)
     previous_word = word
 
-
 generate_markov = (username) ->
   username = username.toLowerCase()
   word = start
@@ -53,6 +52,8 @@ module.exports = (robot) ->
   robot.hear /(.*)/i, (msg) ->
     username = msg.message.user.name.toLowerCase()
     if !msg.message.text.startsWith "--" and !msg.message.text.startsWith "hubot"
+      if msg.room == 'wat'
+        msg.send 'sup #wat, just printing out the message for the markov: ' + msg.message.text
       store_markov(username, msg.message.text)
 
   robot.respond /mimic (.*)/i, (msg) ->
