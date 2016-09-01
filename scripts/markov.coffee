@@ -13,7 +13,7 @@
 # Author:
 #   daniel
 #
-delimiters = /\s+|,\s*|\.\s*|\s*```.*```\s*/
+delimiters = /\s+|,\s+|\.\s+|\s*```.*```\s*/
 start = "{{{START}}}"
 stop = "{{{STOP}}}"
 
