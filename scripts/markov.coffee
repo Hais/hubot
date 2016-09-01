@@ -17,7 +17,7 @@ delimeters = /\s+|,\s*|\.\s*|\s*```.*```\s*/
 start = "{{{START}}}"
 stop = "{{{STOP}}}"
 users_whitelist = ["keigo", "bronsa", "daniel", "mikey", "james", "mrlee", "george", "dave", "shell", "hubot", "hais"]
-rooms_whitelist = ["clojurians", "developers", "general"]
+rooms_whitelist = ["clojurians", "developers", "general", "wat"]
 
 store_markov = (username, msg) ->
   username = username.toLowerCase()
@@ -51,8 +51,8 @@ module.exports = (robot) ->
 
   robot.hear /(.*)/i, (msg) ->
     username = msg.message.user.name.toLowerCase()
-    if username in users_whitelist and msg.message.room in rooms_whitelist
-      store_markov(username, msg.match[1])
+    if username in users_whitelist and msg.message.room in rooms_whitelist and !msg.message.text.startsWith "--"
+      store_markov(username, msg.message.text)
 
   robot.respond /mimic (.*)/i, (msg) ->
     username = msg.match[1].toLowerCase().replace(/^@/, "")
