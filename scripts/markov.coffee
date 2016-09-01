@@ -52,7 +52,7 @@ module.exports = (robot) ->
   robot.hear /(.*)/i, (msg) ->
     username = msg.message.user.name.toLowerCase()
     if !msg.message.text.startsWith "--" and !msg.message.text.startsWith "hubot"
-      if msg.room == 'wat'
+      if msg.room == 'G1FR4NA5S'
         msg.send 'sup #wat, just printing out the message for the markov: ' + msg.message.text
       store_markov(username, msg.message.text)
 
