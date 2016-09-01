@@ -61,4 +61,4 @@ module.exports = (robot) ->
 
   robot.respond /unmimic (.*)/i, (msg) ->
     username = msg.match[1].toLowerCase().replace(/^@/, "")
-      erase_markov(username)
+    erase_markov(username)
