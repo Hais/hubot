@@ -13,7 +13,7 @@
 # Author:
 #   daniel
 #
-delimeters = /\s+|,\s*|\.\s*/
+delimeters = /\s+|,\s*|\.\s*|\s*```.*```\s*/
 start = "{{{START}}}"
 stop = "{{{STOP}}}"
 users_whitelist = ["keigo", "bronsa", "daniel", "mikey", "james", "mrlee", "george", "dave", "shell", "hubot", "hais"]
