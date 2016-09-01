@@ -44,7 +44,7 @@ generate_markov = (username) ->
   return sentence
 
 erase_markov = (username) ->
-  robot.brain.data.markov[username] = {}
+  robot.brain.data.markov[username] = undefined
 
 module.exports = (robot) ->
   robot.brain.on 'loaded', =>
