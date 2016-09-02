@@ -57,7 +57,7 @@ module.exports = (robot) ->
   robot.respond /mimic (.*) (.*)?/i, (msg) ->
     username = msg.match[1].toLowerCase().replace(/^@/, "")
     n = parseInt(msg.match[2], 10) || 1;
-    for num in 1..n
+    for num in [1..n]
       msg.send generate_markov(username)
 
 
