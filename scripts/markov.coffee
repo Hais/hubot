@@ -54,7 +54,7 @@ module.exports = (robot) ->
     if (!msg.message.text.startsWith "--") and (!msg.message.text.startsWith "hubot")
        store_markov(username, msg.message.text)
 
-  robot.respond /mimic (.*) ?(.*)/i, (msg) ->
+  robot.respond /mimic (.* )?(.*)/i, (msg) ->
     username = msg.match[1].toLowerCase().replace(/^@/, "")
     n = parseInt(msg.match[2], 10) || 1;
     for num in [1..n]
