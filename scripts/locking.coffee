@@ -53,7 +53,7 @@ module.exports = (robot) ->
       do (type) ->
         response += "\n - "
         if isLocked(robot, type)
-          response += "#{type}: Locked by @#{getLock(robot, type).user} since #{getLock(robot, type).time.toString()}"
+          response += "#{type}: Locked by #{getLock(robot, type).user} since #{getLock(robot, type).time.toString()}"
         else
           response += "#{type}: Not locked"
 
