@@ -23,6 +23,9 @@ lockables = {
   "those desks where the couch used to be": '(couch|zzz|bed|danilo)'
 }
 
+host = process.env.HUBOT_HOST_NAME || require('os').hostname()
+port = process.env.PORT || 8080
+
 userDisplayName = (user) ->
   return user.name
 
@@ -55,6 +58,7 @@ module.exports = (robot) ->
   robot.router.get '/hubot/locks', (req, res) ->
     data =
       locks: []
+      now: moment().format('LTS')
     for type of lockables
       do (type) ->
         time = getLock(robot, type)?.time
@@ -77,6 +81,8 @@ module.exports = (robot) ->
 
     if not isInDevRoom(msg)
       response += "\n\n You're not in the dev room though, you clown."
+
+    response += "\n\n Or visit http://#{host}:#{port}/hubot/locks"
 
     response += "\n```"
     msg.reply response
