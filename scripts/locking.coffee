@@ -61,7 +61,7 @@ module.exports = (robot) ->
           user: getLock(robot, type)?.user
           time: getLock(robot, type)?.time?.toString()
 
-  robot.hear /(ls)|(suck) (s|l|c)ocks/i, (msg) ->
+  robot.hear /^(ls)|(suck) (s|l|c)ocks/i, (msg) ->
     response = "Here you go:\n```"
     for type of lockables
       do (type) ->
