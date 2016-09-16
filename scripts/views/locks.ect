@@ -15,30 +15,29 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
   </head>
   <body>
-    <h1>Hello, world!</h1>
-    <div class="panel panel-default">
-		  <!-- Default panel contents -->
-		  <div class="panel-heading">Ze locks!</div>
-		  <!-- Table -->
-		  <table class="table">
-		    <thead>
-		        <tr>
-		            <th>Thing</th>
-		            <th>User</th>
-		            <th>Since</th>
-		        </tr>
-		    </thead>
-		    <% if @locks?.length : %>
-		    	<% for lock in @locks : %>
-		    		<tr>
-		    			<td><%- lock.server %></td>
-		    			<td><%- lock.user %></td>
-		    			<td><%- lock.time %></td>
-		    		</tr>
-		    	<% end %>
-		    <% end %>
-		  </table>
-		</div>
+    <div class="container">
+        <h1>Hello, world!</h1>
+        <div class="panel panel-default row">
+          <!-- Default panel contents -->
+          <div class="panel-heading">Ze locks!</div>
+          <!-- Table -->
+          <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Thing</th>
+                    <th>User</th>
+                    <th>Since</th>
+                </tr>
+            </thead>
+            <% if @locks?.length : %><% for lock in @locks : %>
+                <tr>
+                    <td><%- lock.server %></td>
+                    <td><%- lock.user %></td>
+                    <td><%- lock.time %></td>
+                </tr>
+            <% end %><% end %>
+          </table>
+        </div>
 	</div>
   </body>
 </html>
