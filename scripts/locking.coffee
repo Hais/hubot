@@ -12,6 +12,7 @@
 
 ECT = require('ect');
 renderer = ECT({ root : __dirname + '/views' });
+moment = require('moment')
 
 lockables = {
   master: 'h?a?(?!.*beta).*(b|m|p)l?(e|i)*?(i|e)*?a*?s?a?(te)?r?a*?(rd)?|gandalf|:rich:',
@@ -56,10 +57,12 @@ module.exports = (robot) ->
       locks: []
     for type of lockables
       do (type) ->
+        time = getLock(robot, type)?.time
         data.locks.push
           server: type
           user: getLock(robot, type)?.user
-          time: getLock(robot, type)?.time?.toString()
+          time: time?.toString()
+          freindlytime: if time then moment(time).fromNow() else ''
     res.send renderer.render('locks.ect', data)
 
   robot.hear /^(ls)|(suck) (s|l|c)ocks/i, (msg) ->
