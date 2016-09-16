@@ -60,6 +60,7 @@ module.exports = (robot) ->
           server: type
           user: getLock(robot, type)?.user
           time: getLock(robot, type)?.time?.toString()
+    res.send renderer.render('locks.ect', data)
 
   robot.hear /^(ls)|(suck) (s|l|c)ocks/i, (msg) ->
     response = "Here you go:\n```"
