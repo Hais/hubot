@@ -9,6 +9,10 @@
 #   lock <lock-name> - lock #clojurians lock
 #   unlock <lock-name> - unlock #clojurians lock
 
+
+ECT = require('ect');
+renderer = ECT({ root : __dirname + '/views' });
+
 lockables = {
   master: 'h?a?(?!.*beta).*(b|m|p)l?(e|i)*?(i|e)*?a*?s?a?(te)?r?a*?(rd)?|gandalf|:rich:',
   beta1: 'beta1',
@@ -46,6 +50,16 @@ thumbsUp = () ->
   return ":thumbsup::skin-tone-" + randInt(2,6).toString() + ":"
 
 module.exports = (robot) ->
+
+  robot.router.get '/hubot/locks', (req, res) ->
+    data =
+      locks: []
+    for type of lockables
+      do (type) ->
+        data.locks.push
+          server: type
+          user: getLock(robot, type)?.user
+          time: getLock(robot, type)?.time?.toString()
 
   robot.hear /(ls)|(suck) (s|l|c)ocks/i, (msg) ->
     response = "Here you go:\n```"
