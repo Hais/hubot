@@ -29,7 +29,7 @@ userCanonName = (user) ->
   return user.name || user.real_name
 
 isInDevRoom = (msg) ->
-  return msg.message.room == 'clojurians'
+  return msg.message.room in ['clojurians', 'Shell'] # Shell for local testing
 
 grantLock = (robot, type, user) ->
   return robot.brain.set('clojurians-' + type + '-lock', {user: userCanonName(user), time: (new Date)})

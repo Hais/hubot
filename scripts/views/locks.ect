@@ -24,14 +24,22 @@
           <table class="table table-striped">
             <thead>
                 <tr>
+                    <th>&nbsp;</th>
                     <th>Thing</th>
                     <th>User</th>
                     <th>Since</th>
                 </tr>
             </thead>
             <% if @locks?.length : %><% for lock in @locks : %>
-                <tr>
-                    <td><%- lock.server %></td>
+                <tr class="<% if lock.user?.length : %>warning<% end %>">
+                    <td>
+                        &nbsp;<% if lock.user?.length : %>
+                            <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
+                        <% end %>
+                    </td>
+                    <td>
+                        <%- lock.server %>
+                    </td>
                     <td><%- lock.user %></td>
                     <td><%- lock.time %></td>
                 </tr>
