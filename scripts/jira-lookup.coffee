@@ -25,7 +25,7 @@ pattern = process.env.HUBOT_JIRA_PROJECTS || ""
 
 return robot.logger.error "Missing configuration HUBOT_JIRA_PROJECTS" unless pattern.length
 
-regex = new RegExp "(#{pattern})-[0-9]{1,10}", 'gi'
+regex = new RegExp "jira (#{pattern})-[0-9]{1,10}", 'gi'
 
 module.exports = (robot) ->
 
