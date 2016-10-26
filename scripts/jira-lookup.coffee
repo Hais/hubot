@@ -37,7 +37,7 @@ module.exports = (robot) ->
 
     return if msg.message.user.name.match(new RegExp(ignored_users, "gi"))
 
-    for ticketId in regex.exec(msg.message.text.match)[1]
+    for ticketId in regex.exec(msg.message.text)[1]
       do (ticketId) ->
         if process.env.HUBOT_JIRA_LOOKUP_SIMPLE is "true"
           msg.send "Issue: #{ticketId} - #{process.env.HUBOT_JIRA_LOOKUP_URL}/browse/#{ticketId}"
