@@ -35,7 +35,7 @@ module.exports = (robot) ->
 
   robot.hear regex, (msg) ->
 
-    return if msg.message.user.name.match(new RegExp(ignored_users, "gi")) || !msg.message.text.match(new Regexp('jira', "gi"))
+    return if msg.message.user.name.match(new RegExp(ignored_users, "gi")) || !msg.message.text.match(new RegExp('jira', "gi"))
 
     for ticketId in msg.message.text.match regex
       do (ticketId) ->
