@@ -25,7 +25,7 @@ pattern = process.env.HUBOT_JIRA_PROJECTS || ""
 
 return robot.logger.error "Missing configuration HUBOT_JIRA_PROJECTS" unless pattern.length
 
-regex = new RegExp "jira ((#{pattern})-[0-9]{1,10})", 'gi'
+regex = new RegExp "(#{pattern})-[0-9]{1,10}", 'gi'
 
 module.exports = (robot) ->
 
@@ -35,9 +35,9 @@ module.exports = (robot) ->
 
   robot.hear regex, (msg) ->
 
-    return if msg.message.user.name.match(new RegExp(ignored_users, "gi"))
+    return if msg.message.user.name.match(new RegExp(ignored_users, "gi")) || !msg.message.text.match(new Regexp('jira', "gi"))
 
-    for ticketId in regex.exec(msg.message.text)[1]
+    for ticketId in msg.message.text.match regex
       do (ticketId) ->
         if process.env.HUBOT_JIRA_LOOKUP_SIMPLE is "true"
           msg.send "Issue: #{ticketId} - #{process.env.HUBOT_JIRA_LOOKUP_URL}/browse/#{ticketId}"
