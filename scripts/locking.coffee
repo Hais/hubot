@@ -19,7 +19,7 @@ lockables = {
   beta1: 'beta1',
   beta2: 'beta2',
   beta3: 'beta3',
-  live: '(l(i|o)(v|c)e?|prod|light|dogs)',
+  live: '(l(i|o)(v|c)e?|prod|light|dogs|:ryan:)',
   "those desks where the couch used to be": '(couch|zzz|bed|danilo)'
 }
 
