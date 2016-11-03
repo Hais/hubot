@@ -43,8 +43,3 @@ module.exports = (robot) ->
     async.waterfall [create(msg), chat], (err, result) ->
       return msg.send "Error #{err}" if err
       msg.send result
-
-  robot.respond /^~ (.*)/i, (msg) ->
-    async.waterfall [create(msg), chat], (err, result) ->
-      return msg.send "Error #{err}" if err
-      msg.send result
