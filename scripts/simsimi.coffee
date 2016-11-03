@@ -27,7 +27,6 @@ module.exports = (robot) ->
           return cb(err) if err
           result = JSON.parse body
           uuid = result.uuid
-          console.log uuid
           chats[msg.message.user.room] = uuid
           cb null, result.uuid, msg
 
@@ -39,7 +38,19 @@ module.exports = (robot) ->
       result = JSON.parse body
       cb null, result.respSentence
 
-  robot.hear /^~ (.*)/i, (msg) ->
+  run = (msg) ->
     async.waterfall [create(msg), chat], (err, result) ->
       return msg.send "Error #{err}" if err
-      msg.send result
+      if process.env.HUBOT_SLACK_INCOMING_WEBHOOK?
+        robot.emit 'slack.attachment',
+          message: result
+          icon_url: "http://simsimi.com/image/simsimi_logo_1.4k.png"
+          username: "SimSimi"
+      else
+        msg.send result
+
+  robot.hear /^(simsimi|~) (.*)/i, (msg) ->
+    run msg
+
+  robot.respond /~ (.*)/i, (msg) ->
+    run msg
